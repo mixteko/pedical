@@ -5,60 +5,78 @@ let medicamentos = [];
 
 async function cargarMedicamentos() {
 
-    try {
+```
+try {
 
-        const response = await fetch(SHEET_URL);
+    const response = await fetch(SHEET_URL);
 
-        const csv = await response.text();
+    if (!response.ok) {
+        throw new Error("Error al cargar Google Sheets");
+    }
 
-        const filas = csv.trim().split("\n").map(f => f.split(","));
+    const csv = await response.text();
 
-        const encabezados = filas[0].map(h => h.trim());
+    const filas = csv
+        .trim()
+        .split("\n")
+        .map(f => f.split(","));
 
-        medicamentos = filas.slice(1).map(fila => {
+    const encabezados =
+        filas[0].map(h => h.trim());
+
+    medicamentos =
+        filas.slice(1).map(fila => {
 
             let obj = {};
 
             encabezados.forEach((col, i) => {
-                obj[col] = fila[i] ? fila[i].trim() : "";
+
+                obj[col] =
+                    fila[i]
+                    ? fila[i].trim()
+                    : "";
+
             });
 
             return obj;
 
         });
 
-        llenarMedicamentos();
+    llenarMedicamentos();
 
-    } catch (error) {
+} catch (error) {
 
-        console.error(error);
+    console.error(error);
 
-        alert("Error cargando medicamentos");
+    alert("Error cargando medicamentos");
 
-    }
+}
+```
 
 }
 
 function llenarMedicamentos() {
 
-    const select =
+```
+const select =
     document.getElementById("medicamento");
 
-    select.innerHTML = "";
+select.innerHTML = "";
 
-    medicamentos.forEach((med, index) => {
+medicamentos.forEach((med, index) => {
 
-        const option =
+    const option =
         document.createElement("option");
 
-        option.value = index;
+    option.value = index;
 
-        option.textContent =
-        med.NOMBRE;
+    option.textContent =
+        med.NOMBRE || "Sin nombre";
 
-        select.appendChild(option);
+    select.appendChild(option);
 
-    });
+});
+```
 
 }
 
@@ -66,226 +84,350 @@ document
 .getElementById("buscar")
 .addEventListener("input", function () {
 
-    const texto =
+```
+const texto =
     this.value.toLowerCase();
 
-    const select =
+const select =
     document.getElementById("medicamento");
 
-    select.innerHTML = "";
+select.innerHTML = "";
 
-    medicamentos
+medicamentos
     .filter(m =>
-    (m.NOMBRE || "")
-    .toLowerCase()
-    .includes(texto)
+        (m.NOMBRE || "")
+        .toLowerCase()
+        .includes(texto)
     )
     .forEach((med) => {
 
         const option =
-        document.createElement("option");
+            document.createElement("option");
 
         option.value =
-        medicamentos.indexOf(med);
+            medicamentos.indexOf(med);
 
         option.textContent =
-        med.NOMBRE;
+            med.NOMBRE;
 
         select.appendChild(option);
 
     });
+```
 
 });
 
 function calcular() {
 
-    const peso =
+```
+const peso =
     parseFloat(
-    document.getElementById("peso").value
+        document.getElementById("peso").value
     );
 
-    const indice =
+const indice =
     document.getElementById("medicamento").value;
 
-    if(!peso || indice===""){
-        alert("Complete los datos");
-        return;
-    }
+if (!peso || indice === "") {
 
-    const med = medicamentos[indice];
+    alert("Complete los datos");
 
-    const dosisDia =
+    return;
+
+}
+
+const med =
+    medicamentos[indice];
+
+const dosisDia =
     peso *
     parseFloat(med.DOSIS_MG_KG_DIA);
 
-    const frecuencia =
+const frecuencia =
     parseFloat(med.FRECUENCIA);
 
-    const dosisToma =
+const dosisToma =
     dosisDia / frecuencia;
 
-    const mlToma =
+const mlToma =
     (dosisToma *
-    parseFloat(med.CONCENTRACION_ML))
+        parseFloat(med.CONCENTRACION_ML))
     /
     parseFloat(med.CONCENTRACION_MG);
 
-    const resultado =
+const resultado =
     document.getElementById("resultado");
 
-    resultado.style.display="block";
+resultado.style.display = "block";
 
-    resultado.innerHTML = `
-    <div class="result-title">${med.NOMBRE}</div>
+resultado.innerHTML = `
 
-    <div class="result-item">
+<div class="result-title">
+    ${med.NOMBRE}
+</div>
+
+<div class="result-item">
     <span>Dosis diaria</span>
-    <span class="valor">${dosisDia.toFixed(2)} mg</span>
-    </div>
+    <span class="valor">
+        ${dosisDia.toFixed(2)} mg
+    </span>
+</div>
 
-    <div class="result-item">
+<div class="result-item">
     <span>Dosis por toma</span>
-    <span class="valor">${dosisToma.toFixed(2)} mg</span>
-    </div>
+    <span class="valor">
+        ${dosisToma.toFixed(2)} mg
+    </span>
+</div>
 
-    <div class="result-item">
+<div class="result-item">
     <span>Administrar</span>
-    <span class="valor">${mlToma.toFixed(2)} mL</span>
-    </div>
+    <span class="valor">
+        ${mlToma.toFixed(2)} mL
+    </span>
+</div>
 
-    <div class="result-item">
+<div class="result-item">
     <span>Cada</span>
-    <span class="valor">${24/frecuencia} horas</span>
-    </div>
-    `;
+    <span class="valor">
+        ${24 / frecuencia} horas
+    </span>
+</div>
+
+`;
+```
 
 }
 
-function mostrarTab(tab, boton){
+/* ========= PESTAÑAS ========= */
+
+function mostrarTab(tab) {
+
+```
+const secciones = [
+    "medicamentos-tab",
+    "mantenimiento-tab",
+    "deshidratacion-tab"
+];
+
+secciones.forEach(id => {
+
+    const elemento =
+        document.getElementById(id);
+
+    if (elemento) {
+
+        elemento.style.display = "none";
+
+    }
+
+});
+
+const activa =
+    document.getElementById(
+        tab + "-tab"
+    );
+
+if (activa) {
+
+    activa.style.display = "block";
+
+}
 
 document
-.querySelectorAll(".tab-btn")
-.forEach(btn =>
-btn.classList.remove("active")
-);
+    .querySelectorAll(".tab-btn")
+    .forEach(btn =>
+        btn.classList.remove("active")
+    );
 
-boton.classList.add("active");
+if (tab === "medicamentos") {
+    document.querySelectorAll(".tab-btn")[0]
+        .classList.add("active");
+}
 
-document.getElementById("medicamentos-tab").style.display="none";
-document.getElementById("mantenimiento-tab").style.display="none";
-document.getElementById("deshidratacion-tab").style.display="none";
+if (tab === "mantenimiento") {
+    document.querySelectorAll(".tab-btn")[1]
+        .classList.add("active");
+}
 
-document.getElementById(tab+"-tab").style.display="block";
+if (tab === "deshidratacion") {
+    document.querySelectorAll(".tab-btn")[2]
+        .classList.add("active");
+}
+```
 
 }
 
-function calcularMantenimiento(){
+/* ========= MANTENIMIENTO ========= */
 
+function calcularMantenimiento() {
+
+```
 const peso =
-parseFloat(
-document.getElementById("pesoMantenimiento").value
-);
+    parseFloat(
+        document.getElementById(
+            "pesoMantenimiento"
+        ).value
+    );
 
-if(!peso) return;
+if (!peso || peso <= 0) {
+
+    alert("Ingrese un peso válido");
+
+    return;
+
+}
 
 let total = 0;
 
-if(peso<=10){
+if (peso <= 10) {
 
-total = peso*100;
+    total = peso * 100;
 
-}else if(peso<=20){
+} else if (peso <= 20) {
 
-total = 1000 + ((peso-10)*50);
+    total =
+        1000 +
+        ((peso - 10) * 50);
 
-}else{
+} else {
 
-total = 1500 + ((peso-20)*20);
+    total =
+        1500 +
+        ((peso - 20) * 20);
 
 }
 
-const mlHora = total/24;
-const macro = (mlHora*20)/60;
+const mlHora =
+    total / 24;
+
+const micro =
+    Math.round(mlHora);
+
+const macro =
+    Math.round(
+        (mlHora * 20) / 60
+    );
 
 const r =
-document.getElementById("resultadoMantenimiento");
+    document.getElementById(
+        "resultadoMantenimiento"
+    );
 
-r.style.display="block";
+r.style.display = "block";
 
-r.innerHTML=`
+r.innerHTML = `
 
 <div class="result-title">
-💧 Mantenimiento
+    💧 Mantenimiento
 </div>
 
 <div class="result-item">
-<span>mL/día</span>
-<span class="valor">${total.toFixed(0)}</span>
+    <span>mL/día</span>
+    <span class="valor">
+        ${total.toFixed(0)}
+    </span>
 </div>
 
 <div class="result-item">
-<span>mL/hora</span>
-<span class="valor">${mlHora.toFixed(1)}</span>
+    <span>mL/hora</span>
+    <span class="valor">
+        ${mlHora.toFixed(1)}
+    </span>
 </div>
 
 <div class="result-item">
-<span>Microgotas/min</span>
-<span class="valor">${mlHora.toFixed(0)}</span>
+    <span>Microgotas/min</span>
+    <span class="valor">
+        ${micro}
+    </span>
 </div>
 
 <div class="result-item">
-<span>Macrogotas/min</span>
-<span class="valor">${macro.toFixed(0)}</span>
+    <span>Macrogotas/min</span>
+    <span class="valor">
+        ${macro}
+    </span>
 </div>
 
 `;
+```
 
 }
 
-function calcularDeshidratacion(){
+/* ========= DESHIDRATACION ========= */
 
+function calcularDeshidratacion() {
+
+```
 const peso =
-parseFloat(
-document.getElementById("pesoDeshidratacion").value
-);
+    parseFloat(
+        document.getElementById(
+            "pesoDeshidratacion"
+        ).value
+    );
 
 const porcentaje =
-parseFloat(
-document.getElementById("porcentaje").value
-);
+    parseFloat(
+        document.getElementById(
+            "porcentaje"
+        ).value
+    );
 
-if(!peso || !porcentaje) return;
+if (
+    !peso ||
+    !porcentaje
+) {
+
+    alert(
+        "Complete los datos"
+    );
+
+    return;
+
+}
 
 const deficit =
-peso * porcentaje * 10;
+    peso *
+    porcentaje *
+    10;
 
 const r =
-document.getElementById("resultadoDeshidratacion");
+    document.getElementById(
+        "resultadoDeshidratacion"
+    );
 
-r.style.display="block";
+r.style.display = "block";
 
-r.innerHTML=`
+r.innerHTML = `
 
 <div class="result-title">
-🚑 Deshidratación
+    🚑 Deshidratación
 </div>
 
 <div class="result-item">
-<span>Déficit</span>
-<span class="valor">${deficit.toFixed(0)} mL</span>
+    <span>Déficit hídrico</span>
+    <span class="valor">
+        ${deficit.toFixed(0)} mL
+    </span>
 </div>
 
 <div class="result-item">
-<span>Reposición 24 h</span>
-<span class="valor">${deficit.toFixed(0)} mL</span>
+    <span>Reposición 24 h</span>
+    <span class="valor">
+        ${deficit.toFixed(0)} mL
+    </span>
 </div>
 
 `;
+```
 
 }
 
 window.onload = () => {
 
+```
 cargarMedicamentos();
+```
 
 };
