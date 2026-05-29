@@ -76,6 +76,8 @@ function activarBuscador(){
 const buscador =
 document.getElementById("buscar");
 
+if(!buscador) return;
+
 buscador.addEventListener("input",function(){
 
 const texto =
@@ -211,7 +213,7 @@ document.getElementById("btnDeshidratacion").classList.add("active");
 }
 
 /* ========================= */
-/* MANTENIMIENTO */
+/* HOLLIDAY SEGAR */
 /* ========================= */
 
 function mantenimientoHS(peso){
@@ -227,6 +229,10 @@ return 1000 + ((peso-10)*50);
 return 1500 + ((peso-20)*20);
 
 }
+
+/* ========================= */
+/* MANTENIMIENTO */
+/* ========================= */
 
 function calcularMantenimiento(){
 
@@ -283,7 +289,7 @@ r.innerHTML=`
 }
 
 /* ========================= */
-/* DESHIDRATACIÓN */
+/* DESHIDRATACION V1.70 */
 /* ========================= */
 
 function actualizarPorcentaje(){
@@ -294,9 +300,7 @@ document.getElementById("gradoDeshidratacion").value;
 const porcentaje =
 document.getElementById("porcentaje");
 
-if(grado==="personalizada"){
-return;
-}
+if(grado==="personalizada") return;
 
 porcentaje.value = grado;
 
@@ -311,8 +315,10 @@ const porcentaje =
 parseFloat(document.getElementById("porcentaje").value);
 
 if(!peso || !porcentaje){
+
 alert("Complete los datos");
 return;
+
 }
 
 const deficit =
@@ -331,12 +337,24 @@ const mantenimiento16 =
 mantenimiento * (16/24);
 
 const primeras8 =
-(deficit / 2) +
-mantenimiento8;
+(deficit/2) + mantenimiento8;
 
 const siguientes16 =
-(deficit / 2) +
-mantenimiento16;
+(deficit/2) + mantenimiento16;
+
+const velocidad8 =
+primeras8 / 8;
+
+const velocidad16 =
+siguientes16 / 16;
+
+let bolo = 0;
+
+if(porcentaje >= 10){
+
+bolo = peso * 20;
+
+}
 
 const r =
 document.getElementById("resultadoDeshidratacion");
@@ -351,37 +369,44 @@ r.innerHTML=`
 
 <div class="result-item">
 <span>Déficit hídrico</span>
-<span class="valor">
-${deficit.toFixed(0)} mL
-</span>
+<span class="valor">${deficit.toFixed(0)} mL</span>
 </div>
 
 <div class="result-item">
 <span>Mantenimiento 24 h</span>
-<span class="valor">
-${mantenimiento.toFixed(0)} mL
-</span>
+<span class="valor">${mantenimiento.toFixed(0)} mL</span>
 </div>
 
 <div class="result-item">
 <span>Total 24 h</span>
-<span class="valor">
-${total24.toFixed(0)} mL
-</span>
+<span class="valor">${total24.toFixed(0)} mL</span>
 </div>
+
+${bolo > 0 ? `
+<div class="result-item">
+<span>Bolo inicial</span>
+<span class="valor">${bolo.toFixed(0)} mL SSN 0.9%</span>
+</div>
+` : ""}
 
 <div class="result-item">
 <span>Primeras 8 h</span>
-<span class="valor">
-${primeras8.toFixed(0)} mL
-</span>
+<span class="valor">${primeras8.toFixed(0)} mL</span>
+</div>
+
+<div class="result-item">
+<span>Velocidad 8 h</span>
+<span class="valor">${velocidad8.toFixed(1)} mL/h</span>
 </div>
 
 <div class="result-item">
 <span>Siguientes 16 h</span>
-<span class="valor">
-${siguientes16.toFixed(0)} mL
-</span>
+<span class="valor">${siguientes16.toFixed(0)} mL</span>
+</div>
+
+<div class="result-item">
+<span>Velocidad 16 h</span>
+<span class="valor">${velocidad16.toFixed(1)} mL/h</span>
 </div>
 
 `;
@@ -397,23 +422,13 @@ window.addEventListener("DOMContentLoaded",()=>{
 cargarMedicamentos();
 activarBuscador();
 
-document.getElementById("btnMedicamentos")
-.onclick=()=>mostrarTab("medicamentos");
+document.getElementById("btnMedicamentos").onclick=()=>mostrarTab("medicamentos");
+document.getElementById("btnMantenimiento").onclick=()=>mostrarTab("mantenimiento");
+document.getElementById("btnDeshidratacion").onclick=()=>mostrarTab("deshidratacion");
 
-document.getElementById("btnMantenimiento")
-.onclick=()=>mostrarTab("mantenimiento");
-
-document.getElementById("btnDeshidratacion")
-.onclick=()=>mostrarTab("deshidratacion");
-
-document.getElementById("btnCalcular")
-.onclick=calcularMedicamento;
-
-document.getElementById("btnMantenimientoCalc")
-.onclick=calcularMantenimiento;
-
-document.getElementById("btnDeshidratacionCalc")
-.onclick=calcularDeshidratacion;
+document.getElementById("btnCalcular").onclick=calcularMedicamento;
+document.getElementById("btnMantenimientoCalc").onclick=calcularMantenimiento;
+document.getElementById("btnDeshidratacionCalc").onclick=calcularDeshidratacion;
 
 document.getElementById("gradoDeshidratacion")
 .addEventListener("change",actualizarPorcentaje);
