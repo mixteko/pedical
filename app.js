@@ -50,9 +50,33 @@ return obj;
 
 llenarMedicamentos();
 
+const estado =
+document.getElementById(
+"estadoConexion"
+);
+
+if(estado){
+
+estado.innerHTML =
+"🟢 Base de medicamentos cargada";
+
+}
+
 }catch(error){
 
 console.error(error);
+
+const estado =
+document.getElementById(
+"estadoConexion"
+);
+
+if(estado){
+
+estado.innerHTML =
+"🔴 Error cargando medicamentos";
+
+}
 
 alert(
 "Error cargando medicamentos"
@@ -61,7 +85,6 @@ alert(
 }
 
 }
-
 /* ================================= */
 /* LLENAR SELECT */
 /* ================================= */
@@ -94,6 +117,8 @@ option
 );
 
 });
+
+restaurarMedicamento();
 
 }
 
@@ -159,6 +184,36 @@ option
 }
 
 /* ================================= */
+/* LOCAL STORAGE */
+/* ================================= */
+
+function restaurarMedicamento(){
+
+const ultimo =
+localStorage.getItem(
+"ultimoMedicamento"
+);
+
+if(
+ultimo !== null
+){
+
+setTimeout(()=>{
+
+const select =
+document.getElementById(
+"medicamento"
+);
+
+select.value =
+ultimo;
+
+},300);
+
+}
+
+}
+/* ================================= */
 /* MEDICAMENTOS */
 /* ================================= */
 
@@ -175,6 +230,11 @@ const indice =
 document.getElementById(
 "medicamento"
 ).value;
+
+localStorage.setItem(
+"ultimoMedicamento",
+indice
+);
 
 if(!peso){
 
@@ -233,7 +293,8 @@ document.getElementById(
 
 r.style.display =
 "block";
-  r.innerHTML = `
+
+r.innerHTML = `
 
 <div class="result-title">
 💊 ${med.NOMBRE}
@@ -326,7 +387,6 @@ Frecuencia:
 Cada ${24/frecuencia} horas`;
 
 }
-
 /* ================================= */
 /* COPIAR INDICACION */
 /* ================================= */
@@ -352,6 +412,74 @@ alert(
 );
 
 }
+
+/* ================================= */
+/* LIMPIAR */
+/* ================================= */
+
+function limpiarMedicamentos(){
+
+document.getElementById(
+"peso"
+).value = "";
+
+document.getElementById(
+"buscar"
+).value = "";
+
+document.getElementById(
+"resultado"
+).innerHTML = "";
+
+document.getElementById(
+"resultado"
+).style.display =
+"none";
+
+}
+
+function limpiarMantenimiento(){
+
+document.getElementById(
+"pesoMantenimiento"
+).value = "";
+
+document.getElementById(
+"resultadoMantenimiento"
+).innerHTML = "";
+
+document.getElementById(
+"resultadoMantenimiento"
+).style.display =
+"none";
+
+}
+
+function limpiarDeshidratacion(){
+
+document.getElementById(
+"pesoDeshidratacion"
+).value = "";
+
+document.getElementById(
+"porcentaje"
+).value = "5";
+
+document.getElementById(
+"gradoDeshidratacion"
+).value = "5";
+
+document.getElementById(
+"resultadoDeshidratacion"
+).innerHTML = "";
+
+document.getElementById(
+"resultadoDeshidratacion"
+).style.display =
+"none";
+
+}
+
 /* ================================= */
 /* PESTAÑAS */
 /* ================================= */
@@ -360,18 +488,23 @@ function mostrarTab(tab){
 
 document.getElementById(
 "medicamentos-tab"
-).style.display = "none";
+).style.display =
+"none";
 
 document.getElementById(
 "mantenimiento-tab"
-).style.display = "none";
+).style.display =
+"none";
 
 document.getElementById(
 "deshidratacion-tab"
-).style.display = "none";
+).style.display =
+"none";
 
 document
-.querySelectorAll(".tab-btn")
+.querySelectorAll(
+".tab-btn"
+)
 .forEach(btn=>{
 
 btn.classList.remove(
@@ -384,7 +517,8 @@ if(tab==="medicamentos"){
 
 document.getElementById(
 "medicamentos-tab"
-).style.display = "block";
+).style.display =
+"block";
 
 document.getElementById(
 "btnMedicamentos"
@@ -398,7 +532,8 @@ if(tab==="mantenimiento"){
 
 document.getElementById(
 "mantenimiento-tab"
-).style.display = "block";
+).style.display =
+"block";
 
 document.getElementById(
 "btnMantenimiento"
@@ -412,7 +547,8 @@ if(tab==="deshidratacion"){
 
 document.getElementById(
 "deshidratacion-tab"
-).style.display = "block";
+).style.display =
+"block";
 
 document.getElementById(
 "btnDeshidratacion"
@@ -423,7 +559,6 @@ document.getElementById(
 }
 
 }
-
 /* ================================= */
 /* HOLLIDAY SEGAR */
 /* ================================= */
@@ -858,4 +993,61 @@ document.getElementById(
 actualizarPorcentaje
 );
 
+/* BOTONES LIMPIAR */
+
+const btnLM =
+document.getElementById(
+"btnLimpiarMedicamentos"
+);
+
+if(btnLM){
+btnLM.onclick =
+limpiarMedicamentos;
+}
+
+const btnLMan =
+document.getElementById(
+"btnLimpiarMantenimiento"
+);
+
+if(btnLMan){
+btnLMan.onclick =
+limpiarMantenimiento;
+}
+
+const btnLD =
+document.getElementById(
+"btnLimpiarDeshidratacion"
+);
+
+if(btnLD){
+btnLD.onclick =
+limpiarDeshidratacion;
+}
+
 });
+
+/* ================================= */
+/* PWA */
+/* ================================= */
+
+if(
+"serviceWorker"
+in navigator
+){
+
+window.addEventListener(
+"load",
+()=>{
+
+navigator.serviceWorker
+.register(
+"./service-worker.js"
+)
+.catch(
+err=>console.log(err)
+);
+
+});
+
+}
