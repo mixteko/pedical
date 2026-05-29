@@ -1,4 +1,3 @@
-alert("APP CARGADA");
 const SHEET_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl2i7g0UIQW5Jw6dKXmStMBcrYrcsJ2Kxd0dinPfV75Wjoe0z-fxFBQLtxMsD3A8Xby3DpbKmPXMU/pub?gid=0&single=true&output=csv";
 
@@ -12,16 +11,13 @@ async function cargarMedicamentos(){
 
 try{
 
-const response =
-await fetch(SHEET_URL);
-
-const csv =
-await response.text();
+const response = await fetch(SHEET_URL);
+const csv = await response.text();
 
 const filas =
 csv.trim()
 .split("\n")
-.map(f=>f.split(","));
+.map(f => f.split(","));
 
 const encabezados =
 filas[0].map(h=>h.trim());
@@ -32,12 +28,7 @@ filas.slice(1).map(fila=>{
 let obj={};
 
 encabezados.forEach((col,i)=>{
-
-obj[col] =
-fila[i]
-? fila[i].trim()
-: "";
-
+obj[col]=fila[i] ? fila[i].trim() : "";
 });
 
 return obj;
@@ -49,10 +40,7 @@ llenarMedicamentos();
 }catch(error){
 
 console.error(error);
-
-alert(
-"Error cargando medicamentos"
-);
+alert("Error cargando medicamentos");
 
 }
 
@@ -61,28 +49,19 @@ alert(
 function llenarMedicamentos(){
 
 const select =
-document.getElementById(
-"medicamento"
-);
+document.getElementById("medicamento");
 
-select.innerHTML = "";
+select.innerHTML="";
 
-medicamentos.forEach(
-(med,index)=>{
+medicamentos.forEach((med,index)=>{
 
 const option =
-document.createElement(
-"option"
-);
+document.createElement("option");
 
-option.value = index;
+option.value=index;
+option.textContent=med.NOMBRE;
 
-option.textContent =
-med.NOMBRE || "";
-
-select.appendChild(
-option
-);
+select.appendChild(option);
 
 });
 
@@ -95,26 +74,20 @@ option
 function activarBuscador(){
 
 const buscador =
-document.getElementById(
-"buscar"
-);
+document.getElementById("buscar");
 
-buscador.addEventListener(
-"input",
-function(){
+buscador.addEventListener("input",function(){
 
 const texto =
 this.value.toLowerCase();
 
 const select =
-document.getElementById(
-"medicamento"
-);
+document.getElementById("medicamento");
 
-select.innerHTML = "";
+select.innerHTML="";
 
 medicamentos
-.filter(m=>
+.filter(m =>
 (m.NOMBRE || "")
 .toLowerCase()
 .includes(texto)
@@ -122,21 +95,15 @@ medicamentos
 .forEach((med)=>{
 
 const option =
-document.createElement(
-"option"
-);
+document.createElement("option");
 
 option.value =
-medicamentos.indexOf(
-med
-);
+medicamentos.indexOf(med);
 
 option.textContent =
 med.NOMBRE;
 
-select.appendChild(
-option
-);
+select.appendChild(option);
 
 });
 
@@ -148,98 +115,65 @@ option
 /* MEDICAMENTOS */
 /* ========================= */
 
-function calcular(){
+function calcularMedicamento(){
 
 const peso =
-parseFloat(
-document.getElementById(
-"peso"
-).value
-);
+parseFloat(document.getElementById("peso").value);
 
 const indice =
-document.getElementById(
-"medicamento"
-).value;
+document.getElementById("medicamento").value;
 
 if(!peso){
-
-alert(
-"Ingrese peso"
-);
-
+alert("Ingrese peso");
 return;
-
 }
 
 const med =
 medicamentos[indice];
 
 const dosisDia =
-peso *
-parseFloat(
-med.DOSIS_MG_KG_DIA
-);
+peso * parseFloat(med.DOSIS_MG_KG_DIA);
 
 const frecuencia =
-parseFloat(
-med.FRECUENCIA
-);
+parseFloat(med.FRECUENCIA);
 
 const dosisToma =
-dosisDia /
-frecuencia;
+dosisDia / frecuencia;
 
 const mlToma =
-(dosisToma *
-parseFloat(
-med.CONCENTRACION_ML
-))
+(dosisToma * parseFloat(med.CONCENTRACION_ML))
 /
-parseFloat(
-med.CONCENTRACION_MG
-);
+parseFloat(med.CONCENTRACION_MG);
 
-const resultado =
-document.getElementById(
-"resultado"
-);
+const r =
+document.getElementById("resultado");
 
-resultado.style.display =
-"block";
+r.style.display="block";
 
-resultado.innerHTML = `
+r.innerHTML=`
 
 <div class="result-title">
-${med.NOMBRE}
+💊 ${med.NOMBRE}
 </div>
 
 <div class="result-item">
 <span>Dosis diaria</span>
-<span class="valor">
-${dosisDia.toFixed(2)} mg
-</span>
+<span class="valor">${dosisDia.toFixed(2)} mg</span>
 </div>
 
 <div class="result-item">
 <span>Dosis por toma</span>
-<span class="valor">
-${dosisToma.toFixed(2)} mg
-</span>
+<span class="valor">${dosisToma.toFixed(2)} mg</span>
 </div>
 
 <div class="result-item">
 <span>Administrar</span>
-<span class="valor">
-${mlToma.toFixed(2)} mL
-</span>
+<span class="valor">${mlToma.toFixed(2)} mL</span>
 </div>
 
 <div class="result-item">
-<span>Cada</span>
-<span class="valor">
-${24/frecuencia} horas
-</span>
+<span>Frecuencia</span>
+<span class="valor">Cada ${24/frecuencia} horas</span>
 </div>
 
 `;
@@ -250,91 +184,28 @@ ${24/frecuencia} horas
 /* PESTAÑAS */
 /* ========================= */
 
-function activarTabs(){
-
-const btnMed =
-document.getElementById(
-"btnMedicamentos"
-);
-
-const btnMant =
-document.getElementById(
-"btnMantenimiento"
-);
-
-const btnDes =
-document.getElementById(
-"btnDeshidratacion"
-);
-
-btnMed.onclick=()=>mostrarTab("medicamentos");
-btnMant.onclick=()=>mostrarTab("mantenimiento");
-btnDes.onclick=()=>mostrarTab("deshidratacion");
-
-}
-
 function mostrarTab(tab){
 
-document.getElementById(
-"medicamentos-tab"
-).style.display="none";
+document.getElementById("medicamentos-tab").style.display="none";
+document.getElementById("mantenimiento-tab").style.display="none";
+document.getElementById("deshidratacion-tab").style.display="none";
 
-document.getElementById(
-"mantenimiento-tab"
-).style.display="none";
-
-document.getElementById(
-"deshidratacion-tab"
-).style.display="none";
-
-document.querySelectorAll(
-".tab-btn"
-).forEach(btn=>
-btn.classList.remove(
-"active"
-)
-);
+document.querySelectorAll(".tab-btn")
+.forEach(btn=>btn.classList.remove("active"));
 
 if(tab==="medicamentos"){
-
-document.getElementById(
-"medicamentos-tab"
-).style.display="block";
-
-document.getElementById(
-"btnMedicamentos"
-).classList.add(
-"active"
-);
-
+document.getElementById("medicamentos-tab").style.display="block";
+document.getElementById("btnMedicamentos").classList.add("active");
 }
 
 if(tab==="mantenimiento"){
-
-document.getElementById(
-"mantenimiento-tab"
-).style.display="block";
-
-document.getElementById(
-"btnMantenimiento"
-).classList.add(
-"active"
-);
-
+document.getElementById("mantenimiento-tab").style.display="block";
+document.getElementById("btnMantenimiento").classList.add("active");
 }
 
 if(tab==="deshidratacion"){
-
-document.getElementById(
-"deshidratacion-tab"
-).style.display="block";
-
-document.getElementById(
-"btnDeshidratacion"
-).classList.add(
-"active"
-);
-
+document.getElementById("deshidratacion-tab").style.display="block";
+document.getElementById("btnDeshidratacion").classList.add("active");
 }
 
 }
@@ -343,54 +214,41 @@ document.getElementById(
 /* MANTENIMIENTO */
 /* ========================= */
 
+function mantenimientoHS(peso){
+
+if(peso<=10){
+return peso*100;
+}
+
+if(peso<=20){
+return 1000 + ((peso-10)*50);
+}
+
+return 1500 + ((peso-20)*20);
+
+}
+
 function calcularMantenimiento(){
 
 const peso =
-parseFloat(
-document.getElementById(
-"pesoMantenimiento"
-).value
-);
+parseFloat(document.getElementById("pesoMantenimiento").value);
 
 if(!peso) return;
 
-let total=0;
-
-if(peso<=10){
-
-total=peso*100;
-
-}else if(peso<=20){
-
-total=
-1000+
-((peso-10)*50);
-
-}else{
-
-total=
-1500+
-((peso-20)*20);
-
-}
+const total =
+mantenimientoHS(peso);
 
 const mlHora =
 total/24;
 
 const micro =
-Math.round(
-mlHora
-);
+Math.round(mlHora);
 
 const macro =
-Math.round(
-(mlHora*20)/60
-);
+Math.round((mlHora*20)/60);
 
 const r =
-document.getElementById(
-"resultadoMantenimiento"
-);
+document.getElementById("resultadoMantenimiento");
 
 r.style.display="block";
 
@@ -402,30 +260,22 @@ r.innerHTML=`
 
 <div class="result-item">
 <span>mL/día</span>
-<span class="valor">
-${total.toFixed(0)}
-</span>
+<span class="valor">${total.toFixed(0)}</span>
 </div>
 
 <div class="result-item">
 <span>mL/hora</span>
-<span class="valor">
-${mlHora.toFixed(1)}
-</span>
+<span class="valor">${mlHora.toFixed(1)}</span>
 </div>
 
 <div class="result-item">
 <span>Microgotas/min</span>
-<span class="valor">
-${micro}
-</span>
+<span class="valor">${micro}</span>
 </div>
 
 <div class="result-item">
 <span>Macrogotas/min</span>
-<span class="valor">
-${macro}
-</span>
+<span class="valor">${macro}</span>
 </div>
 
 `;
@@ -436,34 +286,52 @@ ${macro}
 /* DESHIDRATACIÓN */
 /* ========================= */
 
+function actualizarPorcentaje(){
+
+const grado =
+document.getElementById("gradoDeshidratacion").value;
+
+const porcentaje =
+document.getElementById("porcentaje");
+
+if(grado==="personalizada"){
+return;
+}
+
+porcentaje.value = grado;
+
+}
+
 function calcularDeshidratacion(){
 
 const peso =
-parseFloat(
-document.getElementById(
-"pesoDeshidratacion"
-).value
-);
+parseFloat(document.getElementById("pesoDeshidratacion").value);
 
 const porcentaje =
-parseFloat(
-document.getElementById(
-"porcentaje"
-).value
-);
+parseFloat(document.getElementById("porcentaje").value);
 
-if(!peso || !porcentaje)
+if(!peso || !porcentaje){
+alert("Complete los datos");
 return;
+}
 
 const deficit =
-peso *
-porcentaje *
-10;
+peso * porcentaje * 10;
+
+const mantenimiento =
+mantenimientoHS(peso);
+
+const total24 =
+deficit + mantenimiento;
+
+const primeras8 =
+deficit / 2;
+
+const siguientes16 =
+deficit / 2;
 
 const r =
-document.getElementById(
-"resultadoDeshidratacion"
-);
+document.getElementById("resultadoDeshidratacion");
 
 r.style.display="block";
 
@@ -474,17 +342,28 @@ r.innerHTML=`
 </div>
 
 <div class="result-item">
-<span>Déficit</span>
-<span class="valor">
-${deficit.toFixed(0)} mL
-</span>
+<span>Déficit hídrico</span>
+<span class="valor">${deficit.toFixed(0)} mL</span>
 </div>
 
 <div class="result-item">
-<span>Reposición 24 h</span>
-<span class="valor">
-${deficit.toFixed(0)} mL
-</span>
+<span>Mantenimiento</span>
+<span class="valor">${mantenimiento.toFixed(0)} mL</span>
+</div>
+
+<div class="result-item">
+<span>Total 24 h</span>
+<span class="valor">${total24.toFixed(0)} mL</span>
+</div>
+
+<div class="result-item">
+<span>Primeras 8 h</span>
+<span class="valor">${primeras8.toFixed(0)} mL</span>
+</div>
+
+<div class="result-item">
+<span>Siguientes 16 h</span>
+<span class="valor">${siguientes16.toFixed(0)} mL</span>
 </div>
 
 `;
@@ -495,42 +374,30 @@ ${deficit.toFixed(0)} mL
 /* INICIO */
 /* ========================= */
 
-window.addEventListener(
-"DOMContentLoaded",
-()=>{
+window.addEventListener("DOMContentLoaded",()=>{
 
 cargarMedicamentos();
-
 activarBuscador();
 
-activarTabs();
+document.getElementById("btnMedicamentos")
+.onclick=()=>mostrarTab("medicamentos");
 
-document
-.getElementById(
-"btnCalcular"
-)
-.addEventListener(
-"click",
-calcular
-);
+document.getElementById("btnMantenimiento")
+.onclick=()=>mostrarTab("mantenimiento");
 
-document
-.getElementById(
-"btnMantenimientoCalc"
-)
-.addEventListener(
-"click",
-calcularMantenimiento
-);
+document.getElementById("btnDeshidratacion")
+.onclick=()=>mostrarTab("deshidratacion");
 
-document
-.getElementById(
-"btnDeshidratacionCalc"
-)
-.addEventListener(
-"click",
-calcularDeshidratacion
-);
+document.getElementById("btnCalcular")
+.onclick=calcularMedicamento;
 
-}
-);
+document.getElementById("btnMantenimientoCalc")
+.onclick=calcularMantenimiento;
+
+document.getElementById("btnDeshidratacionCalc")
+.onclick=calcularDeshidratacion;
+
+document.getElementById("gradoDeshidratacion")
+.addEventListener("change",actualizarPorcentaje);
+
+});
