@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PediCalc Pro v1.50</title>
+<title>PediCalc Pro v1.51</title>
 
 <meta name="theme-color" content="#2563eb">
 
@@ -43,25 +43,27 @@ Calculadora Pediátrica Inteligente
 
 <button
 class="tab-btn active"
-onclick="mostrarTab('medicamentos', this)">
+onclick="mostrarTab('medicamentos')">
 💊 Medicamentos
 </button>
 
 <button
 class="tab-btn"
-onclick="mostrarTab('mantenimiento', this)">
+onclick="mostrarTab('mantenimiento')">
 💧 Mantenimiento
 </button>
 
 <button
 class="tab-btn"
-onclick="mostrarTab('deshidratacion', this)">
+onclick="mostrarTab('deshidratacion')">
 🚑 Deshidratación
 </button>
 
 </div>
 
+<!-- ========================= -->
 <!-- MEDICAMENTOS -->
+<!-- ========================= -->
 
 <div id="medicamentos-tab">
 
@@ -116,13 +118,17 @@ CALCULAR DOSIS
 
 </div>
 
+<!-- ========================= -->
 <!-- MANTENIMIENTO -->
+<!-- ========================= -->
 
-<div id="mantenimiento-tab" style="display:none;">
+<div
+id="mantenimiento-tab"
+style="display:none;">
 
 <div class="form-group">
 
-<label>
+<label for="pesoMantenimiento">
 Peso del paciente
 </label>
 
@@ -142,26 +148,31 @@ CALCULAR LÍQUIDOS
 
 </div>
 
-<!-- DESHIDRATACION -->
+<!-- ========================= -->
+<!-- DESHIDRATACIÓN -->
+<!-- ========================= -->
 
-<div id="deshidratacion-tab" style="display:none;">
+<div
+id="deshidratacion-tab"
+style="display:none;">
 
 <div class="form-group">
 
-<label>
+<label for="pesoDeshidratacion">
 Peso del paciente
 </label>
 
 <input
 id="pesoDeshidratacion"
 type="number"
-step="0.1">
+step="0.1"
+placeholder="Ejemplo: 15 kg">
 
 </div>
 
 <div class="form-group">
 
-<label>
+<label for="porcentaje">
 Porcentaje de deshidratación
 </label>
 
@@ -184,7 +195,9 @@ CALCULAR REPOSICIÓN
 </div>
 
 <div class="version">
-PediCalc Pro v1.50
+
+PediCalc Pro v1.51
+
 </div>
 
 </div>
