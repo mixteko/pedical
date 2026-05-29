@@ -1,46 +1,229 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>PediCalc Pro v1.72</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
 <div class="container">
 
-<header>
+<div class="header">
 
-<h1>🩺 PediCalc Pro v1.72</h1>
+<div class="logo">
+🩺
+</div>
+
+<h1>PediCalc Pro</h1>
 
 <p>
-Calculadora Pediátrica Inteligente
+Calculadora Pediátrica Inteligente v1.72
 </p>
 
-</header>
+</div>
 
-<nav class="tabs">
+<div class="tabs">
 
-<button id="btnMedicamentos">
+<button class="tab-btn active" id="btnMedicamentos">
 💊 Medicamentos
 </button>
 
-<button id="btnMantenimiento">
+<button class="tab-btn" id="btnMantenimiento">
 💧 Mantenimiento
 </button>
 
-<button id="btnDeshidratacion">
+<button class="tab-btn" id="btnDeshidratacion">
 🚑 Deshidratación
 </button>
 
-</nav>
+</div>
 
-<div id="contenido">
+<!-- MEDICAMENTOS -->
+
+<section id="medicamentos-tab">
+
+<div class="card">
+
+<div class="form-group">
+
+<label>Peso (kg)</label>
+
+<input
+type="number"
+id="peso"
+step="0.1"
+placeholder="Ejemplo: 15">
 
 </div>
+
+<div class="form-group">
+
+<label>Buscar medicamento</label>
+
+<input
+type="text"
+id="buscar"
+placeholder="Paracetamol">
+
+</div>
+
+<div class="form-group">
+
+<label>Medicamento</label>
+
+<select id="medicamento">
+
+<option>
+Cargando...
+</option>
+
+</select>
+
+</div>
+
+<button id="btnCalcular">
+CALCULAR DOSIS
+</button>
+
+<div id="resultado"></div>
+
+</div>
+
+</section>
+
+<!-- MANTENIMIENTO -->
+
+<section
+id="mantenimiento-tab"
+style="display:none;">
+
+<div class="card">
+
+<div class="form-group">
+
+<label>Peso (kg)</label>
+
+<input
+type="number"
+id="pesoMantenimiento"
+step="0.1">
+
+</div>
+
+<button id="btnMantenimientoCalc">
+
+CALCULAR
+
+</button>
+
+<div id="resultadoMantenimiento"></div>
+
+</div>
+
+</section>
+
+<!-- DESHIDRATACION -->
+
+<section
+id="deshidratacion-tab"
+style="display:none;">
+
+<div class="card">
+
+<div class="form-group">
+
+<label>Peso (kg)</label>
+
+<input
+type="number"
+id="pesoDeshidratacion"
+step="0.1">
+
+</div>
+
+<div class="form-group">
+
+<label>Grado</label>
+
+<select id="gradoDeshidratacion">
+
+<option value="5">
+🟢 Leve (5%)
+</option>
+
+<option value="8">
+🟡 Moderada (8%)
+</option>
+
+<option value="10">
+🔴 Grave (10%)
+</option>
+
+<option value="personalizada">
+⚙️ Personalizada
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Porcentaje</label>
+
+<input
+type="number"
+id="porcentaje"
+value="5">
+
+</div>
+
+<div class="form-group">
+
+<label>Solución</label>
+
+<select id="tipoSolucion">
+
+<option value="SSN 0.9%">
+SSN 0.9%
+</option>
+
+<option value="Hartmann">
+Hartmann
+</option>
+
+<option value="Mixta">
+Mixta
+</option>
+
+</select>
+
+</div>
+
+<button id="btnDeshidratacionCalc">
+
+CALCULAR REPOSICIÓN
+
+</button>
+
+<div id="resultadoDeshidratacion"></div>
+
+</div>
+
+</section>
 
 </div>
 
