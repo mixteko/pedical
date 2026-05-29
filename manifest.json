@@ -2,12 +2,12 @@
   "name": "PediCalc Pro",
   "short_name": "PediCalc",
   "description": "Calculadora Pediátrica Inteligente",
-  "start_url": "./",
+ "start_url":"/pedical/",
   "display": "standalone",
   "background_color": "#2563eb",
   "theme_color": "#2563eb",
   "orientation": "portrait",
-  "scope": "./",
+"scope":"/pedical/"
   "lang": "es-MX",
   "icons": [
     {
