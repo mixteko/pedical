@@ -3,68 +3,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PediCalc Pro v1.0</title>
+
+<title>PediCalc Pro</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <style>
-body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px}
-.card{max-width:700px;margin:auto;background:#1e293b;padding:20px;border-radius:16px}
-h1{text-align:center;color:#38bdf8}
-input,select,button{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:none}
-button{background:#06b6d4;color:white;font-weight:bold;cursor:pointer}
-.result{margin-top:15px;padding:15px;background:#0f172a;border-radius:10px}
-.small{font-size:12px;color:#cbd5e1}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,255,255,.2);
+margin-bottom:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#22d3ee;
+}
+
+label{
+display:block;
+margin-top:15px;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+input, select{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+border:none;
+border-radius:10px;
+background:#06b6d4;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#0891b2;
+}
+
+.resultado{
+margin-top:20px;
+padding:20px;
+background:#0f172a;
+border-radius:15px;
+}
+
+.valor{
+color:#22d3ee;
+font-weight:bold;
+}
+
+.info{
+font-size:14px;
+color:#cbd5e1;
+margin-top:10px;
+}
+
 </style>
+
 </head>
+
 <body>
+
+<div class="container">
+
 <div class="card">
+
 <h1>PediCalc Pro</h1>
+
+<label>Cargar Excel</label>
+<input type="file" id="excelFile" accept=".xlsx,.xls">
 
 <label>Peso (kg)</label>
 <input type="number" id="peso" step="0.1">
 
 <label>Medicamento</label>
-<select id="med">
-<option value="">Seleccione</option>
-<option value="Paracetamol|15|160|5">Paracetamol</option>
-<option value="Ibuprofeno|10|100|5">Ibuprofeno</option>
-<option value="Amoxicilina|45|250|5">Amoxicilina</option>
-<option value="Ceftriaxona|50|1000|10">Ceftriaxona</option>
+<select id="medicamento">
+<option value="">Cargue un Excel primero</option>
 </select>
 
-<button onclick="calcular()">Calcular</button>
+<button onclick="calcular()">
+Calcular
+</button>
 
-<div class="result" id="resultado"></div>
+<div class="resultado" id="resultado">
 
-<p class="small">
-Versión demostrativa. Verifique siempre dosis, indicaciones, edad, función renal y guías clínicas antes de prescribir.
-</p>
+Esperando cálculo...
+
+</div>
+
+</div>
+
 </div>
 
 <script>
-function calcular(){
- let peso=parseFloat(document.getElementById('peso').value);
- let med=document.getElementById('med').value;
 
- if(!peso || !med){
-   alert('Ingrese peso y medicamento');
-   return;
- }
+let medicamentos = [];
 
- let d=med.split('|');
+document
+.getElementById("excelFile")
+.addEventListener("change", leerExcel);
 
- let nombre=d[0];
- let dosisKg=parseFloat(d[1]);
- let concMg=parseFloat(d[2]);
- let concMl=parseFloat(d[3]);
+function leerExcel(e){
 
- let mg=peso*dosisKg;
- let ml=(mg*concMl)/concMg;
+const archivo = e.target.files[0];
 
- document.getElementById('resultado').innerHTML=
- `<h3>${nombre}</h3>
- <b>Peso:</b> ${peso} kg<br>
- <b>Dosis calculada:</b> ${mg.toFixed(1)} mg<br>
- <b>Volumen:</b> ${ml.toFixed(2)} mL`;
+const reader = new FileReader();
+
+reader.onload = function(event){
+
+const data = new Uint8Array(event.target.result);
+
+const workbook = XLSX.read(data,{
+type:'array'
+});
+
+const hoja =
+workbook.Sheets[
+workbook.SheetNames[0]
+];
+
+medicamentos =
+XLSX.utils.sheet_to_json(hoja);
+
+cargarMedicamentos();
+
+};
+
+reader.readAsArrayBuffer(archivo);
+
 }
+
+function cargarMedicamentos(){
+
+const select =
+document.getElementById("medicamento");
+
+select.innerHTML =
+'<option value="">Seleccione</option>';
+
+medicamentos.forEach((med,index)=>{
+
+const option =
+document.createElement("option");
+
+option.value = index;
+
+option.textContent = med.nombre;
+
+select.appendChild(option);
+
+});
+
+}
+
+function calcular(){
+
+const peso =
+parseFloat(
+document.getElementById("peso").value
+);
+
+const indice =
+document.getElementById("medicamento").value;
+
+if(!peso || indice===""){
+
+alert("Ingrese peso y medicamento");
+
+return;
+
+}
+
+const med =
+medicamentos[indice];
+
+const dosisDia =
+peso *
+parseFloat(med.dosis_kg_dia);
+
+const dosisToma =
+dosisDia /
+parseFloat(med.frecuencia);
+
+const mlToma =
+(dosisToma *
+parseFloat(med.concentracion_ml))
+/
+parseFloat(med.concentracion_mg);
+
+const horas =
+24 /
+parseFloat(med.frecuencia);
+
+document.getElementById("resultado").innerHTML =
+
+`
+<h2>${med.nombre}</h2>
+
+<br>
+
+<p>
+Dosis diaria:
+<span class="valor">
+${dosisDia.toFixed(2)} mg/día
+</span>
+</p>
+
+<br>
+
+<p>
+Dosis por toma:
+<span class="valor">
+${dosisToma.toFixed(2)} mg
+</span>
+</p>
+
+<br>
+
+<p>
+Administrar:
+<span class="valor">
+${mlToma.toFixed(2)} mL
+</span>
+</p>
+
+<br>
+
+<p>
+Frecuencia:
+<span class="valor">
+Cada ${horas} horas
+</span>
+</p>
+
+`;
+
+}
+
 </script>
+
 </body>
 </html>
