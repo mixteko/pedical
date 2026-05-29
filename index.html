@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -6,7 +7,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PediCalc Pro v1.72</title>
+<title>PediCalc Pro v1.73</title>
+
+<meta name="theme-color" content="#2563eb">
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="apple-touch-icon" href="icon-192.png">
 
 <link rel="stylesheet" href="style.css">
 
@@ -30,8 +37,12 @@
 <h1>PediCalc Pro</h1>
 
 <p>
-Calculadora Pediátrica Inteligente v1.72
+Calculadora Pediátrica Inteligente v1.73
 </p>
+
+<div id="estadoConexion">
+🟢 Base de medicamentos cargada
+</div>
 
 </div>
 
@@ -51,47 +62,25 @@ Calculadora Pediátrica Inteligente v1.72
 
 </div>
 
-<!-- MEDICAMENTOS -->
-
 <section id="medicamentos-tab">
 
 <div class="card">
 
 <div class="form-group">
-
 <label>Peso (kg)</label>
-
-<input
-type="number"
-id="peso"
-step="0.1"
-placeholder="Ejemplo: 15">
-
+<input type="number" id="peso" step="0.1" placeholder="Ejemplo: 15">
 </div>
 
 <div class="form-group">
-
 <label>Buscar medicamento</label>
-
-<input
-type="text"
-id="buscar"
-placeholder="Paracetamol">
-
+<input type="text" id="buscar" placeholder="Paracetamol">
 </div>
 
 <div class="form-group">
-
 <label>Medicamento</label>
-
 <select id="medicamento">
-
-<option>
-Cargando...
-</option>
-
+<option>Cargando...</option>
 </select>
-
 </div>
 
 <button id="btnCalcular">
@@ -100,11 +89,14 @@ CALCULAR DOSIS
 
 <div id="resultado"></div>
 
+<button
+id="btnLimpiarMedicamentos"
+class="secondary-btn">
+🧹 Limpiar </button>
+
 </div>
 
 </section>
-
-<!-- MANTENIMIENTO -->
 
 <section
 id="mantenimiento-tab"
@@ -113,29 +105,24 @@ style="display:none;">
 <div class="card">
 
 <div class="form-group">
-
 <label>Peso (kg)</label>
-
-<input
-type="number"
-id="pesoMantenimiento"
-step="0.1">
-
+<input type="number" id="pesoMantenimiento" step="0.1">
 </div>
 
 <button id="btnMantenimientoCalc">
-
 CALCULAR
-
 </button>
 
 <div id="resultadoMantenimiento"></div>
 
+<button
+id="btnLimpiarMantenimiento"
+class="secondary-btn">
+🧹 Limpiar </button>
+
 </div>
 
 </section>
-
-<!-- DESHIDRATACION -->
 
 <section
 id="deshidratacion-tab"
@@ -144,18 +131,11 @@ style="display:none;">
 <div class="card">
 
 <div class="form-group">
-
 <label>Peso (kg)</label>
-
-<input
-type="number"
-id="pesoDeshidratacion"
-step="0.1">
-
+<input type="number" id="pesoDeshidratacion" step="0.1">
 </div>
 
 <div class="form-group">
-
 <label>Grado</label>
 
 <select id="gradoDeshidratacion">
@@ -181,14 +161,8 @@ step="0.1">
 </div>
 
 <div class="form-group">
-
 <label>Porcentaje</label>
-
-<input
-type="number"
-id="porcentaje"
-value="5">
-
+<input type="number" id="porcentaje" value="5">
 </div>
 
 <div class="form-group">
@@ -214,12 +188,15 @@ Mixta
 </div>
 
 <button id="btnDeshidratacionCalc">
-
 CALCULAR REPOSICIÓN
-
 </button>
 
 <div id="resultadoDeshidratacion"></div>
+
+<button
+id="btnLimpiarDeshidratacion"
+class="secondary-btn">
+🧹 Limpiar </button>
 
 </div>
 
@@ -230,4 +207,5 @@ CALCULAR REPOSICIÓN
 <script src="app.js"></script>
 
 </body>
+
 </html>
