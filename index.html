@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PediCalc Pro v1.0</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px}
+.card{max-width:700px;margin:auto;background:#1e293b;padding:20px;border-radius:16px}
+h1{text-align:center;color:#38bdf8}
+input,select,button{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:none}
+button{background:#06b6d4;color:white;font-weight:bold;cursor:pointer}
+.result{margin-top:15px;padding:15px;background:#0f172a;border-radius:10px}
+.small{font-size:12px;color:#cbd5e1}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>PediCalc Pro</h1>
+
+<label>Peso (kg)</label>
+<input type="number" id="peso" step="0.1">
+
+<label>Medicamento</label>
+<select id="med">
+<option value="">Seleccione</option>
+<option value="Paracetamol|15|160|5">Paracetamol</option>
+<option value="Ibuprofeno|10|100|5">Ibuprofeno</option>
+<option value="Amoxicilina|45|250|5">Amoxicilina</option>
+<option value="Ceftriaxona|50|1000|10">Ceftriaxona</option>
+</select>
+
+<button onclick="calcular()">Calcular</button>
+
+<div class="result" id="resultado"></div>
+
+<p class="small">
+Versión demostrativa. Verifique siempre dosis, indicaciones, edad, función renal y guías clínicas antes de prescribir.
+</p>
+</div>
+
+<script>
+function calcular(){
+ let peso=parseFloat(document.getElementById('peso').value);
+ let med=document.getElementById('med').value;
+
+ if(!peso || !med){
+   alert('Ingrese peso y medicamento');
+   return;
+ }
+
+ let d=med.split('|');
+
+ let nombre=d[0];
+ let dosisKg=parseFloat(d[1]);
+ let concMg=parseFloat(d[2]);
+ let concMl=parseFloat(d[3]);
+
+ let mg=peso*dosisKg;
+ let ml=(mg*concMl)/concMg;
+
+ document.getElementById('resultado').innerHTML=
+ `<h3>${nombre}</h3>
+ <b>Peso:</b> ${peso} kg<br>
+ <b>Dosis calculada:</b> ${mg.toFixed(1)} mg<br>
+ <b>Volumen:</b> ${ml.toFixed(2)} mL`;
+}
+</script>
+</body>
+</html>
