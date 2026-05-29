@@ -1040,13 +1040,12 @@ window.addEventListener(
 "load",
 ()=>{
 
-navigator.serviceWorker
-.register(
+navigator.serviceWorker.register(
 "/pedical/service-worker.js",
 {
 scope:"/pedical/"
 }
-)
+);
 .catch(
 err=>console.log(err)
 );
