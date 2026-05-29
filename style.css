@@ -1,251 +1,73 @@
-/* PediCalc Pro v1.20 */
+.logo-container{
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+display:flex;
+justify-content:center;
+margin-bottom:15px;
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
 }
 
-body{
+.logo-icon{
 
-background:
-linear-gradient(
-135deg,
-#0f172a,
-#111827,
-#1e293b
-);
-
-min-height:100vh;
-
-padding:20px;
+width:80px;
+height:80px;
 
 display:flex;
 justify-content:center;
 align-items:center;
 
-color:white;
-
-}
-
-.container{
-
-width:100%;
-max-width:650px;
-
-}
-
-.card{
-
-background:
-rgba(255,255,255,.06);
-
-backdrop-filter:
-blur(20px);
-
--webkit-backdrop-filter:
-blur(20px);
-
-border:
-1px solid rgba(255,255,255,.1);
-
-border-radius:32px;
-
-padding:30px;
-
-box-shadow:
-0 20px 60px rgba(0,0,0,.35);
-
-}
-
-h1{
-
-font-size:2.4rem;
-font-weight:700;
-
-text-align:center;
-
-background:
-linear-gradient(
-90deg,
-#38bdf8,
-#22c55e
-);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-margin-bottom:10px;
-
-}
-
-.subtitle{
-
-text-align:center;
-
-font-size:.95rem;
-
-color:#cbd5e1;
-
-margin-bottom:30px;
-
-}
-
-input,
-select{
-
-width:100%;
-
-padding:18px;
-
-margin-bottom:16px;
-
-border:none;
-
-border-radius:18px;
-
-background:
-rgba(255,255,255,.07);
-
-color:white;
-
-font-size:16px;
-
-transition:.3s;
-
-}
-
-input::placeholder{
-
-color:#94a3b8;
-
-}
-
-input:focus,
-select:focus{
-
-outline:none;
-
-transform:translateY(-2px);
-
-box-shadow:
-0 0 0 2px #38bdf8;
-
-}
-
-button{
-
-width:100%;
-
-padding:18px;
-
-border:none;
-
-border-radius:18px;
-
-cursor:pointer;
-
-font-size:17px;
-
-font-weight:700;
-
-color:white;
+font-size:42px;
 
 background:
 linear-gradient(
 135deg,
-#0ea5e9,
+#2563eb,
 #06b6d4
 );
 
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:
-translateY(-3px);
+border-radius:50%;
 
 box-shadow:
-0 10px 30px rgba(14,165,233,.35);
+0 10px 30px rgba(37,99,235,.25);
 
 }
 
-#resultado{
-
-display:none;
-
-margin-top:25px;
-
-padding:25px;
-
-border-radius:24px;
-
-background:
-rgba(255,255,255,.05);
-
-border:
-1px solid rgba(255,255,255,.08);
-
-}
-
-.result-title{
-
-font-size:1.5rem;
-
-font-weight:700;
-
-margin-bottom:20px;
-
-color:#38bdf8;
+.header{
 
 text-align:center;
+margin-bottom:25px;
 
 }
 
-.result-item{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:14px;
+.form-group{
 
 margin-bottom:10px;
 
-border-radius:14px;
+}
 
-background:
-rgba(255,255,255,.04);
+.form-group label{
+
+display:block;
+
+font-size:14px;
+
+font-weight:600;
+
+margin-bottom:8px;
+
+color:#334155;
 
 }
 
-.valor{
+.version{
 
-font-weight:700;
+text-align:center;
 
-color:#22c55e;
+margin-top:15px;
 
-}
+font-size:12px;
 
-@media(max-width:600px){
+font-weight:600;
 
-.card{
-
-padding:22px;
-
-}
-
-h1{
-
-font-size:2rem;
-
-}
+color:#64748b;
 
 }
