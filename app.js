@@ -2,6 +2,7 @@ const SHEET_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl2i7g0UIQW5Jw6dKXmStMBcrYrcsJ2Kxd0dinPfV75Wjoe0z-fxFBQLtxMsD3A8Xby3DpbKmPXMU/pub?gid=0&single=true&output=csv";
 
 let medicamentos = [];
+let indicacionActual = "";
 
 /* ================================= */
 /* GOOGLE SHEETS */
@@ -20,15 +21,16 @@ await response.text();
 const filas =
 csv.trim()
 .split("\n")
-.map(f=>f.split(","));
+.map(f => f.split(","));
 
 const encabezados =
 filas[0].map(
-h=>h.trim()
+h => h.trim()
 );
 
 medicamentos =
-filas.slice(1).map(fila=>{
+filas.slice(1).map(
+fila => {
 
 let obj = {};
 
@@ -40,8 +42,7 @@ fila[i]
 ? fila[i].trim()
 : "";
 
-}
-);
+});
 
 return obj;
 
@@ -60,6 +61,10 @@ alert(
 }
 
 }
+
+/* ================================= */
+/* LLENAR SELECT */
+/* ================================= */
 
 function llenarMedicamentos(){
 
@@ -88,8 +93,7 @@ select.appendChild(
 option
 );
 
-}
-);
+});
 
 }
 
@@ -111,7 +115,8 @@ buscador.addEventListener(
 function(){
 
 const texto =
-this.value.toLowerCase();
+this.value
+.toLowerCase();
 
 const select =
 document.getElementById(
@@ -147,11 +152,9 @@ select.appendChild(
 option
 );
 
-}
-);
+});
 
-}
-);
+});
 
 }
 
@@ -230,11 +233,31 @@ document.getElementById(
 
 r.style.display =
 "block";
-
-r.innerHTML = `
+  r.innerHTML = `
 
 <div class="result-title">
 💊 ${med.NOMBRE}
+</div>
+
+<div class="result-item">
+<span>Categoría</span>
+<span class="valor">
+${med.CATEGORIA || "-"}
+</span>
+</div>
+
+<div class="result-item">
+<span>Vía</span>
+<span class="valor">
+${med.VIA || "-"}
+</span>
+</div>
+
+<div class="result-item">
+<span>Dosis máxima</span>
+<span class="valor">
+${med["DOSIS MAXIMAS"] || "-"}
+</span>
 </div>
 
 <div class="result-item">
@@ -274,24 +297,43 @@ onclick="copiarIndicacion()">
 
 `;
 
-window.indicacionActual =
+indicacionActual =
+
 `${med.NOMBRE}
 
-Peso: ${peso} kg
+Categoría:
+${med.CATEGORIA || "-"}
+
+Vía:
+${med.VIA || "-"}
+
+Dosis máxima:
+${med["DOSIS MAXIMAS"] || "-"}
+
+Peso:
+${peso} kg
+
+Dosis diaria:
+${dosisDia.toFixed(2)} mg
+
+Dosis por toma:
+${dosisToma.toFixed(2)} mg
 
 Administrar:
 ${mlToma.toFixed(2)} mL
 
+Frecuencia:
 Cada ${24/frecuencia} horas`;
 
 }
+
 /* ================================= */
 /* COPIAR INDICACION */
 /* ================================= */
 
 function copiarIndicacion(){
 
-if(!window.indicacionActual){
+if(!indicacionActual){
 
 alert(
 "No hay indicación"
@@ -302,7 +344,7 @@ return;
 }
 
 navigator.clipboard.writeText(
-window.indicacionActual
+indicacionActual
 );
 
 alert(
@@ -310,7 +352,6 @@ alert(
 );
 
 }
-
 /* ================================= */
 /* PESTAÑAS */
 /* ================================= */
@@ -605,11 +646,11 @@ mantenimiento *
 (16/24);
 
 const primeras8 =
-(deficit/2) +
+(deficit / 2) +
 mantenimiento8;
 
 const siguientes16 =
-(deficit/2) +
+(deficit / 2) +
 mantenimiento16;
 
 const velocidad8 =
