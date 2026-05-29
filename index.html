@@ -1,304 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>PediCalc Pro v1.60</title>
-
-<meta name="theme-color" content="#2563eb">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>PediCalc Pro v1.72</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
 <div class="container">
 
-<div class="card">
+<header>
 
-<div class="header">
+<h1>🩺 PediCalc Pro v1.72</h1>
 
-<div class="logo-container">
-<div class="logo-icon">🩺</div>
-</div>
-
-<h1>PediCalc Pro</h1>
-
-<p class="subtitle">
-Calculadora Pediátrica Inteligente v1.60
+<p>
+Calculadora Pediátrica Inteligente
 </p>
 
-</div>
+</header>
 
-<!-- ========================= -->
-<!-- PESTAÑAS -->
-<!-- ========================= -->
+<nav class="tabs">
 
-<div class="tabs">
-
-<button
-class="tab-btn active"
-id="btnMedicamentos">
-
+<button id="btnMedicamentos">
 💊 Medicamentos
-
 </button>
 
-<button
-class="tab-btn"
-id="btnMantenimiento">
-
+<button id="btnMantenimiento">
 💧 Mantenimiento
-
 </button>
 
-<button
-class="tab-btn"
-id="btnDeshidratacion">
-
+<button id="btnDeshidratacion">
 🚑 Deshidratación
-
 </button>
 
-</div>
+</nav>
 
-<!-- ========================= -->
-<!-- MEDICAMENTOS -->
-<!-- ========================= -->
-
-<section id="medicamentos-tab">
-
-<div class="form-group">
-
-<label>
-Peso del paciente (kg)
-</label>
-
-<input
-id="peso"
-type="number"
-step="0.1"
-placeholder="Ejemplo: 15.5">
-
-</div>
-
-<div class="form-group">
-
-<label>
-Buscar medicamento
-</label>
-
-<input
-id="buscar"
-type="text"
-placeholder="Paracetamol, Amoxicilina, etc">
-
-</div>
-
-<div class="form-group">
-
-<label>
-Medicamento
-</label>
-
-<select id="medicamento">
-
-<option value="">
-Cargando medicamentos...
-</option>
-
-</select>
-
-</div>
-
-<button id="btnCalcular">
-
-CALCULAR DOSIS
-
-</button>
-
-<div id="resultado"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- MANTENIMIENTO -->
-<!-- ========================= -->
-
-<section
-id="mantenimiento-tab"
-style="display:none;">
-
-<div class="form-group">
-
-<label>
-Peso del paciente (kg)
-</label>
-
-<input
-id="pesoMantenimiento"
-type="number"
-step="0.1"
-placeholder="Ejemplo: 15">
-
-</div>
-
-<div class="info-box">
-
-<h3>💧 Regla de Holliday-Segar</h3>
-
-<p>
-Primeros 10 kg = 100 mL/kg
-</p>
-
-<p>
-Segundo 10 kg = 50 mL/kg
-</p>
-
-<p>
-&gt; 20 kg = 20 mL/kg
-</p>
-
-</div>
-
-<button id="btnMantenimientoCalc">
-
-CALCULAR LÍQUIDOS
-
-</button>
-
-<div id="resultadoMantenimiento"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- DESHIDRATACIÓN -->
-<!-- ========================= -->
-
-<section
-id="deshidratacion-tab"
-style="display:none;">
-
-<div class="form-group">
-
-<label>
-Peso del paciente (kg)
-</label>
-
-<input
-id="pesoDeshidratacion"
-type="number"
-step="0.1"
-placeholder="Ejemplo: 15">
-
-</div>
-
-<div class="form-group">
-
-<label>
-🚑 Grado de deshidratación
-</label>
-
-<select id="gradoDeshidratacion">
-
-<option value="5">
-🟢 Leve (5%)
-</option>
-
-<option value="8">
-🟡 Moderada (8%)
-</option>
-
-<option value="10">
-🔴 Grave (10%)
-</option>
-
-<option value="personalizada">
-⚙️ Personalizada
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>
-Porcentaje de deshidratación
-</label>
-
-<input
-id="porcentaje"
-type="number"
-step="0.1"
-value="5">
-<div class="form-group">
-
-<label>
-💧 Tipo de solución
-</label>
-
-<select id="tipoSolucion">
-
-<option value="SSN 0.9%">
-SSN 0.9%
-</option>
-
-<option value="Hartmann">
-Hartmann
-</option>
-
-<option value="Mixta">
-Mixta
-</option>
-
-</select>
-
-</div>
-</div>
-
-<div class="info-box">
-
-<h3>ℹ️ ¿Cómo se calcula?</h3>
-
-<p>
-Déficit = Peso × % × 10
-</p>
-
-<p>
-Mantenimiento = Holliday-Segar
-</p>
-
-<p>
-Total = Déficit + Mantenimiento
-</p>
-
-</div>
-
-<button id="btnDeshidratacionCalc">
-
-CALCULAR REPOSICIÓN
-
-</button>
-
-<div id="resultadoDeshidratacion"></div>
-
-</section>
-
-</div>
-
-<div class="version">
-
-PediCalc Pro v1.60
+<div id="contenido">
 
 </div>
 
@@ -307,5 +47,4 @@ PediCalc Pro v1.60
 <script src="app.js"></script>
 
 </body>
-
 </html>
