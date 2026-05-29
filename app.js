@@ -324,11 +324,19 @@ mantenimientoHS(peso);
 const total24 =
 deficit + mantenimiento;
 
+const mantenimiento8 =
+mantenimiento * (8/24);
+
+const mantenimiento16 =
+mantenimiento * (16/24);
+
 const primeras8 =
-deficit / 2;
+(deficit / 2) +
+mantenimiento8;
 
 const siguientes16 =
-deficit / 2;
+(deficit / 2) +
+mantenimiento16;
 
 const r =
 document.getElementById("resultadoDeshidratacion");
@@ -343,27 +351,37 @@ r.innerHTML=`
 
 <div class="result-item">
 <span>Déficit hídrico</span>
-<span class="valor">${deficit.toFixed(0)} mL</span>
+<span class="valor">
+${deficit.toFixed(0)} mL
+</span>
 </div>
 
 <div class="result-item">
-<span>Mantenimiento</span>
-<span class="valor">${mantenimiento.toFixed(0)} mL</span>
+<span>Mantenimiento 24 h</span>
+<span class="valor">
+${mantenimiento.toFixed(0)} mL
+</span>
 </div>
 
 <div class="result-item">
 <span>Total 24 h</span>
-<span class="valor">${total24.toFixed(0)} mL</span>
+<span class="valor">
+${total24.toFixed(0)} mL
+</span>
 </div>
 
 <div class="result-item">
 <span>Primeras 8 h</span>
-<span class="valor">${primeras8.toFixed(0)} mL</span>
+<span class="valor">
+${primeras8.toFixed(0)} mL
+</span>
 </div>
 
 <div class="result-item">
 <span>Siguientes 16 h</span>
-<span class="valor">${siguientes16.toFixed(0)} mL</span>
+<span class="valor">
+${siguientes16.toFixed(0)} mL
+</span>
 </div>
 
 `;
