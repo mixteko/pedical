@@ -3,202 +3,273 @@ const SHEET_URL =
 
 let medicamentos = [];
 
-async function cargarMedicamentos(){
+async function cargarMedicamentos() {
 
-try{
+    try {
 
-const respuesta = await fetch(SHEET_URL);
+        const response = await fetch(SHEET_URL);
 
-const texto = await respuesta.text();
+        if (!response.ok) {
+            throw new Error("No se pudo cargar Google Sheets");
+        }
 
-const filas = texto.trim().split("\n");
+        const csv = await response.text();
 
-const encabezados =
-filas[0]
-.split(",")
-.map(h => h.trim());
+        const filas = csv
+            .trim()
+            .split("\n")
+            .map(f => f.split(","));
 
-medicamentos = filas
-.slice(1)
-.map(fila => {
+        const encabezados = filas[0].map(h => h.trim());
 
-const valores = fila.split(",");
+        medicamentos = filas.slice(1).map(fila => {
 
-let obj = {};
+            let obj = {};
 
-encabezados.forEach((col,i)=>{
+            encabezados.forEach((col, i) => {
 
-obj[col.trim()] =
-valores[i]?.trim() || "";
+                obj[col] = fila[i]
+                    ? fila[i].trim()
+                    : "";
 
-});
+            });
 
-return obj;
+            return obj;
 
-});
+        });
 
-llenarSelect();
+        llenarMedicamentos();
 
-}catch(error){
+        console.log(
+            "Medicamentos cargados:",
+            medicamentos.length
+        );
 
-console.error(error);
+    }
+    catch (error) {
 
-alert("Error cargando medicamentos");
+        console.error(error);
+
+        alert(
+            "Error cargando medicamentos desde Google Sheets"
+        );
+
+    }
 
 }
 
-}
+function llenarMedicamentos() {
 
-function llenarSelect(){
+    const select =
+        document.getElementById("medicamento");
 
-const select =
-document.getElementById("medicamento");
+    select.innerHTML = "";
 
-select.innerHTML="";
+    medicamentos.forEach((med, index) => {
 
-medicamentos.forEach((med,index)=>{
+        const option =
+            document.createElement("option");
 
-const option =
-document.createElement("option");
+        option.value = index;
 
-option.value=index;
+        option.textContent =
+            med.NOMBRE || "Sin nombre";
 
-option.textContent=med.nombre;
+        select.appendChild(option);
 
-select.appendChild(option);
-
-});
+    });
 
 }
 
 document
 .getElementById("buscar")
-.addEventListener("input", function(){
+.addEventListener("input", function () {
 
-const texto =
-this.value.toLowerCase();
+    const texto =
+        this.value.toLowerCase();
 
-const select =
-document.getElementById("medicamento");
+    const select =
+        document.getElementById("medicamento");
 
-select.innerHTML="";
+    select.innerHTML = "";
 
-medicamentos
-.filter(m =>
-m.nombre.toLowerCase().includes(texto)
-)
-.forEach((med,index)=>{
+    medicamentos
+        .filter(m =>
+            (m.NOMBRE || "")
+            .toLowerCase()
+            .includes(texto)
+        )
+        .forEach((med) => {
 
-const option =
-document.createElement("option");
+            const option =
+                document.createElement("option");
 
-option.value =
-medicamentos.indexOf(med);
+            option.value =
+                medicamentos.indexOf(med);
 
-option.textContent =
-med.nombre;
+            option.textContent =
+                med.NOMBRE;
 
-select.appendChild(option);
+            select.appendChild(option);
+
+        });
 
 });
 
-});
+function calcular() {
 
-function calcular(){
+    const peso =
+        parseFloat(
+            document.getElementById("peso").value
+        );
 
-const peso =
-parseFloat(
-document.getElementById("peso").value
-);
+    if (!peso || peso <= 0) {
 
-const indice =
-document.getElementById("medicamento").value;
+        alert(
+            "Ingrese un peso válido"
+        );
 
-if(!peso){
+        return;
 
-alert("Ingrese el peso");
+    }
 
-return;
+    const indice =
+        document.getElementById("medicamento").value;
+
+    if (indice === "") {
+
+        alert(
+            "Seleccione un medicamento"
+        );
+
+        return;
+
+    }
+
+    const med =
+        medicamentos[indice];
+
+    const dosisKgDia =
+        parseFloat(
+            med.DOSIS_MG_KG_DIA
+        );
+
+    const frecuencia =
+        parseFloat(
+            med.FRECUENCIA
+        );
+
+    const concentracionMl =
+        parseFloat(
+            med.CONCENTRACION_ML
+        );
+
+    const concentracionMg =
+        parseFloat(
+            med.CONCENTRACION_MG
+        );
+
+    if (
+        isNaN(dosisKgDia) ||
+        isNaN(frecuencia) ||
+        isNaN(concentracionMl) ||
+        isNaN(concentracionMg)
+    ) {
+
+        alert(
+            "Datos incompletos en el medicamento seleccionado"
+        );
+
+        return;
+
+    }
+
+    const dosisDia =
+        peso * dosisKgDia;
+
+    const dosisPorToma =
+        dosisDia / frecuencia;
+
+    const mlPorToma =
+        (dosisPorToma * concentracionMl)
+        / concentracionMg;
+
+    const horas =
+        24 / frecuencia;
+
+    const resultado =
+        document.getElementById("resultado");
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+
+        <div class="result-title">
+            ${med.NOMBRE}
+        </div>
+
+        <div class="result-item">
+            Peso:
+            <span class="valor">
+                ${peso} kg
+            </span>
+        </div>
+
+        <div class="result-item">
+            Dosis diaria:
+            <span class="valor">
+                ${dosisDia.toFixed(2)} mg/día
+            </span>
+        </div>
+
+        <div class="result-item">
+            Dosis por toma:
+            <span class="valor">
+                ${dosisPorToma.toFixed(2)} mg
+            </span>
+        </div>
+
+        <div class="result-item">
+            Administrar:
+            <span class="valor">
+                ${mlPorToma.toFixed(2)} mL
+            </span>
+        </div>
+
+        <div class="result-item">
+            Frecuencia:
+            <span class="valor">
+                Cada ${horas} horas
+            </span>
+        </div>
+
+        <div class="result-item">
+            Vía:
+            <span class="valor">
+                ${med.VIA || "-"}
+            </span>
+        </div>
+
+        <div class="result-item">
+            Categoría:
+            <span class="valor">
+                ${med.CATEGORIA || "-"}
+            </span>
+        </div>
+
+        <div class="result-item">
+            Dosis máxima:
+            <span class="valor">
+                ${med["DOSIS MAXIMAS"] || "-"}
+            </span>
+        </div>
+
+    `;
 
 }
 
-const med =
-medicamentos[indice];
+window.onload = () => {
 
-const dosisKgDia =
-parseFloat(med.dosis_kg_dia);
+    cargarMedicamentos();
 
-const frecuencia =
-parseFloat(med.frecuencia);
-
-const concentracionMl =
-parseFloat(med.concentracion_ml);
-
-const concentracionMg =
-parseFloat(med.concentracion_mg);
-
-const dosisDia =
-peso * dosisKgDia;
-
-const dosisToma =
-dosisDia / frecuencia;
-
-const mlToma =
-(dosisToma * concentracionMl)
-/
-concentracionMg;
-
-const horas =
-24 / frecuencia;
-
-const resultado =
-document.getElementById("resultado");
-
-resultado.style.display="block";
-
-resultado.innerHTML =
-
-`
-<div class="result-title">
-${med.nombre}
-</div>
-
-<div class="result-item">
-Peso:
-<span class="valor">
-${peso} kg
-</span>
-</div>
-
-<div class="result-item">
-Dosis diaria:
-<span class="valor">
-${dosisDia.toFixed(2)} mg/día
-</span>
-</div>
-
-<div class="result-item">
-Dosis por toma:
-<span class="valor">
-${dosisToma.toFixed(2)} mg
-</span>
-</div>
-
-<div class="result-item">
-Administrar:
-<span class="valor">
-${mlToma.toFixed(2)} mL
-</span>
-</div>
-
-<div class="result-item">
-Frecuencia:
-<span class="valor">
-Cada ${horas} horas
-</span>
-</div>
-`;
-
-}
-
-cargarMedicamentos();
+};
