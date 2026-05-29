@@ -9,16 +9,9 @@ async function cargarMedicamentos() {
 
         const response = await fetch(SHEET_URL);
 
-        if (!response.ok) {
-            throw new Error("No se pudo cargar Google Sheets");
-        }
-
         const csv = await response.text();
 
-        const filas = csv
-            .trim()
-            .split("\n")
-            .map(f => f.split(","));
+        const filas = csv.trim().split("\n").map(f => f.split(","));
 
         const encabezados = filas[0].map(h => h.trim());
 
@@ -27,11 +20,7 @@ async function cargarMedicamentos() {
             let obj = {};
 
             encabezados.forEach((col, i) => {
-
-                obj[col] = fila[i]
-                    ? fila[i].trim()
-                    : "";
-
+                obj[col] = fila[i] ? fila[i].trim() : "";
             });
 
             return obj;
@@ -40,19 +29,11 @@ async function cargarMedicamentos() {
 
         llenarMedicamentos();
 
-        console.log(
-            "Medicamentos cargados:",
-            medicamentos.length
-        );
-
-    }
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
-        alert(
-            "Error cargando medicamentos desde Google Sheets"
-        );
+        alert("Error cargando medicamentos");
 
     }
 
@@ -61,19 +42,19 @@ async function cargarMedicamentos() {
 function llenarMedicamentos() {
 
     const select =
-        document.getElementById("medicamento");
+    document.getElementById("medicamento");
 
     select.innerHTML = "";
 
     medicamentos.forEach((med, index) => {
 
         const option =
-            document.createElement("option");
+        document.createElement("option");
 
         option.value = index;
 
         option.textContent =
-            med.NOMBRE || "Sin nombre";
+        med.NOMBRE;
 
         select.appendChild(option);
 
@@ -86,190 +67,225 @@ document
 .addEventListener("input", function () {
 
     const texto =
-        this.value.toLowerCase();
+    this.value.toLowerCase();
 
     const select =
-        document.getElementById("medicamento");
+    document.getElementById("medicamento");
 
     select.innerHTML = "";
 
     medicamentos
-        .filter(m =>
-            (m.NOMBRE || "")
-            .toLowerCase()
-            .includes(texto)
-        )
-        .forEach((med) => {
+    .filter(m =>
+    (m.NOMBRE || "")
+    .toLowerCase()
+    .includes(texto)
+    )
+    .forEach((med) => {
 
-            const option =
-                document.createElement("option");
+        const option =
+        document.createElement("option");
 
-            option.value =
-                medicamentos.indexOf(med);
+        option.value =
+        medicamentos.indexOf(med);
 
-            option.textContent =
-                med.NOMBRE;
+        option.textContent =
+        med.NOMBRE;
 
-            select.appendChild(option);
+        select.appendChild(option);
 
-        });
+    });
 
 });
 
 function calcular() {
 
     const peso =
-        parseFloat(
-            document.getElementById("peso").value
-        );
-
-    if (!peso || peso <= 0) {
-
-        alert(
-            "Ingrese un peso válido"
-        );
-
-        return;
-
-    }
+    parseFloat(
+    document.getElementById("peso").value
+    );
 
     const indice =
-        document.getElementById("medicamento").value;
+    document.getElementById("medicamento").value;
 
-    if (indice === "") {
-
-        alert(
-            "Seleccione un medicamento"
-        );
-
+    if(!peso || indice===""){
+        alert("Complete los datos");
         return;
-
     }
 
-    const med =
-        medicamentos[indice];
-
-    const dosisKgDia =
-        parseFloat(
-            med.DOSIS_MG_KG_DIA
-        );
-
-    const frecuencia =
-        parseFloat(
-            med.FRECUENCIA
-        );
-
-    const concentracionMl =
-        parseFloat(
-            med.CONCENTRACION_ML
-        );
-
-    const concentracionMg =
-        parseFloat(
-            med.CONCENTRACION_MG
-        );
-
-    if (
-        isNaN(dosisKgDia) ||
-        isNaN(frecuencia) ||
-        isNaN(concentracionMl) ||
-        isNaN(concentracionMg)
-    ) {
-
-        alert(
-            "Datos incompletos en el medicamento seleccionado"
-        );
-
-        return;
-
-    }
+    const med = medicamentos[indice];
 
     const dosisDia =
-        peso * dosisKgDia;
+    peso *
+    parseFloat(med.DOSIS_MG_KG_DIA);
 
-    const dosisPorToma =
-        dosisDia / frecuencia;
+    const frecuencia =
+    parseFloat(med.FRECUENCIA);
 
-    const mlPorToma =
-        (dosisPorToma * concentracionMl)
-        / concentracionMg;
+    const dosisToma =
+    dosisDia / frecuencia;
 
-    const horas =
-        24 / frecuencia;
+    const mlToma =
+    (dosisToma *
+    parseFloat(med.CONCENTRACION_ML))
+    /
+    parseFloat(med.CONCENTRACION_MG);
 
     const resultado =
-        document.getElementById("resultado");
+    document.getElementById("resultado");
 
-    resultado.style.display = "block";
+    resultado.style.display="block";
 
     resultado.innerHTML = `
+    <div class="result-title">${med.NOMBRE}</div>
 
-        <div class="result-title">
-            ${med.NOMBRE}
-        </div>
+    <div class="result-item">
+    <span>Dosis diaria</span>
+    <span class="valor">${dosisDia.toFixed(2)} mg</span>
+    </div>
 
-        <div class="result-item">
-            Peso:
-            <span class="valor">
-                ${peso} kg
-            </span>
-        </div>
+    <div class="result-item">
+    <span>Dosis por toma</span>
+    <span class="valor">${dosisToma.toFixed(2)} mg</span>
+    </div>
 
-        <div class="result-item">
-            Dosis diaria:
-            <span class="valor">
-                ${dosisDia.toFixed(2)} mg/día
-            </span>
-        </div>
+    <div class="result-item">
+    <span>Administrar</span>
+    <span class="valor">${mlToma.toFixed(2)} mL</span>
+    </div>
 
-        <div class="result-item">
-            Dosis por toma:
-            <span class="valor">
-                ${dosisPorToma.toFixed(2)} mg
-            </span>
-        </div>
-
-        <div class="result-item">
-            Administrar:
-            <span class="valor">
-                ${mlPorToma.toFixed(2)} mL
-            </span>
-        </div>
-
-        <div class="result-item">
-            Frecuencia:
-            <span class="valor">
-                Cada ${horas} horas
-            </span>
-        </div>
-
-        <div class="result-item">
-            Vía:
-            <span class="valor">
-                ${med.VIA || "-"}
-            </span>
-        </div>
-
-        <div class="result-item">
-            Categoría:
-            <span class="valor">
-                ${med.CATEGORIA || "-"}
-            </span>
-        </div>
-
-        <div class="result-item">
-            Dosis máxima:
-            <span class="valor">
-                ${med["DOSIS MAXIMAS"] || "-"}
-            </span>
-        </div>
-
+    <div class="result-item">
+    <span>Cada</span>
+    <span class="valor">${24/frecuencia} horas</span>
+    </div>
     `;
+
+}
+
+function mostrarTab(tab, boton){
+
+document
+.querySelectorAll(".tab-btn")
+.forEach(btn =>
+btn.classList.remove("active")
+);
+
+boton.classList.add("active");
+
+document.getElementById("medicamentos-tab").style.display="none";
+document.getElementById("mantenimiento-tab").style.display="none";
+document.getElementById("deshidratacion-tab").style.display="none";
+
+document.getElementById(tab+"-tab").style.display="block";
+
+}
+
+function calcularMantenimiento(){
+
+const peso =
+parseFloat(
+document.getElementById("pesoMantenimiento").value
+);
+
+if(!peso) return;
+
+let total = 0;
+
+if(peso<=10){
+
+total = peso*100;
+
+}else if(peso<=20){
+
+total = 1000 + ((peso-10)*50);
+
+}else{
+
+total = 1500 + ((peso-20)*20);
+
+}
+
+const mlHora = total/24;
+const macro = (mlHora*20)/60;
+
+const r =
+document.getElementById("resultadoMantenimiento");
+
+r.style.display="block";
+
+r.innerHTML=`
+
+<div class="result-title">
+💧 Mantenimiento
+</div>
+
+<div class="result-item">
+<span>mL/día</span>
+<span class="valor">${total.toFixed(0)}</span>
+</div>
+
+<div class="result-item">
+<span>mL/hora</span>
+<span class="valor">${mlHora.toFixed(1)}</span>
+</div>
+
+<div class="result-item">
+<span>Microgotas/min</span>
+<span class="valor">${mlHora.toFixed(0)}</span>
+</div>
+
+<div class="result-item">
+<span>Macrogotas/min</span>
+<span class="valor">${macro.toFixed(0)}</span>
+</div>
+
+`;
+
+}
+
+function calcularDeshidratacion(){
+
+const peso =
+parseFloat(
+document.getElementById("pesoDeshidratacion").value
+);
+
+const porcentaje =
+parseFloat(
+document.getElementById("porcentaje").value
+);
+
+if(!peso || !porcentaje) return;
+
+const deficit =
+peso * porcentaje * 10;
+
+const r =
+document.getElementById("resultadoDeshidratacion");
+
+r.style.display="block";
+
+r.innerHTML=`
+
+<div class="result-title">
+🚑 Deshidratación
+</div>
+
+<div class="result-item">
+<span>Déficit</span>
+<span class="valor">${deficit.toFixed(0)} mL</span>
+</div>
+
+<div class="result-item">
+<span>Reposición 24 h</span>
+<span class="valor">${deficit.toFixed(0)} mL</span>
+</div>
+
+`;
 
 }
 
 window.onload = () => {
 
-    cargarMedicamentos();
+cargarMedicamentos();
 
 };
