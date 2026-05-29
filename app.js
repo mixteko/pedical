@@ -521,3 +521,300 @@ ${volumen16.toFixed(0)} mL
 `;
 
 }
+/* ================================= */
+/* DESHIDRATACION */
+/* ================================= */
+
+function actualizarPorcentaje(){
+
+const grado =
+document.getElementById(
+"gradoDeshidratacion"
+).value;
+
+const porcentaje =
+document.getElementById(
+"porcentaje"
+);
+
+if(
+grado === "personalizada"
+){
+return;
+}
+
+porcentaje.value =
+grado;
+
+}
+
+function calcularDeshidratacion(){
+
+const peso =
+parseFloat(
+document.getElementById(
+"pesoDeshidratacion"
+).value
+);
+
+const porcentaje =
+parseFloat(
+document.getElementById(
+"porcentaje"
+).value
+);
+
+const tipoSolucion =
+document.getElementById(
+"tipoSolucion"
+).value;
+
+if(
+!peso ||
+!porcentaje
+){
+
+alert(
+"Complete los datos"
+);
+
+return;
+
+}
+
+const deficit =
+peso *
+porcentaje *
+10;
+
+const mantenimiento =
+mantenimientoHS(
+peso
+);
+
+const total24 =
+deficit +
+mantenimiento;
+
+const mantenimiento8 =
+mantenimiento *
+(8/24);
+
+const mantenimiento16 =
+mantenimiento *
+(16/24);
+
+const primeras8 =
+(deficit/2) +
+mantenimiento8;
+
+const siguientes16 =
+(deficit/2) +
+mantenimiento16;
+
+const velocidad8 =
+primeras8 / 8;
+
+const velocidad16 =
+siguientes16 / 16;
+
+const micro8 =
+Math.round(
+velocidad8
+);
+
+const macro8 =
+Math.round(
+(velocidad8 * 20) / 60
+);
+
+const micro16 =
+Math.round(
+velocidad16
+);
+
+const macro16 =
+Math.round(
+(velocidad16 * 20) / 60
+);
+
+let bolo = 0;
+
+if(
+porcentaje >= 10
+){
+
+bolo =
+peso * 20;
+
+}
+
+const r =
+document.getElementById(
+"resultadoDeshidratacion"
+);
+
+r.style.display =
+"block";
+
+r.innerHTML = `
+
+<div class="result-title">
+🚑 Deshidratación
+</div>
+
+<div class="result-item">
+<span>Solución</span>
+<span class="valor">
+${tipoSolucion}
+</span>
+</div>
+
+<div class="result-item">
+<span>Déficit hídrico</span>
+<span class="valor">
+${deficit.toFixed(0)} mL
+</span>
+</div>
+
+<div class="result-item">
+<span>Mantenimiento 24 h</span>
+<span class="valor">
+${mantenimiento.toFixed(0)} mL
+</span>
+</div>
+
+<div class="result-item">
+<span>Total 24 h</span>
+<span class="valor">
+${total24.toFixed(0)} mL
+</span>
+</div>
+
+${bolo > 0 ? `
+
+<div class="result-item">
+<span>Bolo inicial</span>
+<span class="valor">
+${bolo.toFixed(0)} mL
+</span>
+</div>
+
+` : ""}
+
+<div class="result-item">
+<span>Primeras 8 h</span>
+<span class="valor">
+${primeras8.toFixed(0)} mL
+</span>
+</div>
+
+<div class="result-item">
+<span>Velocidad 8 h</span>
+<span class="valor">
+${velocidad8.toFixed(1)} mL/h
+</span>
+</div>
+
+<div class="result-item">
+<span>Microgotas 8 h</span>
+<span class="valor">
+${micro8}/min
+</span>
+</div>
+
+<div class="result-item">
+<span>Macrogotas 8 h</span>
+<span class="valor">
+${macro8}/min
+</span>
+</div>
+
+<div class="result-item">
+<span>Siguientes 16 h</span>
+<span class="valor">
+${siguientes16.toFixed(0)} mL
+</span>
+</div>
+
+<div class="result-item">
+<span>Velocidad 16 h</span>
+<span class="valor">
+${velocidad16.toFixed(1)} mL/h
+</span>
+</div>
+
+<div class="result-item">
+<span>Microgotas 16 h</span>
+<span class="valor">
+${micro16}/min
+</span>
+</div>
+
+<div class="result-item">
+<span>Macrogotas 16 h</span>
+<span class="valor">
+${macro16}/min
+</span>
+</div>
+
+`;
+
+}
+
+/* ================================= */
+/* INICIO */
+/* ================================= */
+
+window.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+cargarMedicamentos();
+
+activarBuscador();
+
+document.getElementById(
+"btnMedicamentos"
+).onclick =
+()=>mostrarTab(
+"medicamentos"
+);
+
+document.getElementById(
+"btnMantenimiento"
+).onclick =
+()=>mostrarTab(
+"mantenimiento"
+);
+
+document.getElementById(
+"btnDeshidratacion"
+).onclick =
+()=>mostrarTab(
+"deshidratacion"
+);
+
+document.getElementById(
+"btnCalcular"
+).onclick =
+calcularMedicamento;
+
+document.getElementById(
+"btnMantenimientoCalc"
+).onclick =
+calcularMantenimiento;
+
+document.getElementById(
+"btnDeshidratacionCalc"
+).onclick =
+calcularDeshidratacion;
+
+document.getElementById(
+"gradoDeshidratacion"
+).addEventListener(
+"change",
+actualizarPorcentaje
+);
+
+});
