@@ -7,15 +7,17 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PediCalc Pro v1.20</title>
+<title>PediCalc Pro v1.30</title>
 
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#2563eb">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -27,8 +29,12 @@
 
 <div class="header">
 
-<div class="logo">
+<div class="logo-container">
+
+<div class="logo-icon">
 🩺
+</div>
+
 </div>
 
 <h1>PediCalc Pro</h1>
@@ -41,7 +47,7 @@ Calculadora Pediátrica Inteligente
 
 <div class="form-group">
 
-<label>
+<label for="peso">
 Peso del paciente
 </label>
 
@@ -55,7 +61,7 @@ placeholder="Ejemplo: 15.5 kg">
 
 <div class="form-group">
 
-<label>
+<label for="buscar">
 Buscar medicamento
 </label>
 
@@ -68,14 +74,14 @@ placeholder="Escriba el nombre del medicamento">
 
 <div class="form-group">
 
-<label>
+<label for="medicamento">
 Medicamento
 </label>
 
 <select id="medicamento">
 
 <option value="">
-Seleccione un medicamento
+Cargando medicamentos...
 </option>
 
 </select>
@@ -94,15 +100,11 @@ CALCULAR DOSIS
 
 </div>
 
-<footer>
+<div class="version">
 
-<div class="footer-text">
-
-PediCalc Pro v1.20
+PediCalc Pro v1.30
 
 </div>
-
-</footer>
 
 </div>
 
