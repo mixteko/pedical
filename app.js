@@ -1042,7 +1042,10 @@ window.addEventListener(
 
 navigator.serviceWorker
 .register(
-"./service-worker.js"
+"/pedical/service-worker.js",
+{
+scope:"/pedical/"
+}
 )
 .catch(
 err=>console.log(err)
