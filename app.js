@@ -1045,7 +1045,7 @@ navigator.serviceWorker.register(
 {
 scope:"/pedical/"
 }
-);
+)
 .catch(
 err=>console.log(err)
 );
