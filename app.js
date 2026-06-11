@@ -3,6 +3,232 @@ const SHEET_URL =
 
 let medicamentos = [];
 let indicacionActual = "";
+let deferredInstallPrompt = null;
+
+function isAppInstalled(){
+
+return window.matchMedia(
+"(display-mode: standalone)"
+).matches ||
+window.navigator.standalone === true;
+
+}
+
+function isIOSDevice(){
+
+return /iphone|ipad|ipod/i.test(
+window.navigator.userAgent
+);
+
+}
+
+function setInstallHelp(mensaje){
+
+const help =
+document.getElementById(
+"installHelp"
+);
+
+if(!help) return;
+
+help.textContent =
+mensaje;
+
+help.classList.add(
+"is-visible"
+);
+
+}
+
+function showInstallModal(){
+
+if(
+isAppInstalled() ||
+sessionStorage.getItem(
+"installPromptDismissed"
+) === "1"
+){
+return;
+}
+
+const modal =
+document.getElementById(
+"installModal"
+);
+
+if(!modal) return;
+
+modal.classList.add(
+"is-visible"
+);
+
+modal.setAttribute(
+"aria-hidden",
+"false"
+);
+
+if(
+isIOSDevice() &&
+!deferredInstallPrompt
+){
+
+setInstallHelp(
+"En iPhone o iPad toca Compartir y luego Agregar a pantalla de inicio."
+);
+
+}
+
+}
+
+function hideInstallModal(recordarSesion = true){
+
+const modal =
+document.getElementById(
+"installModal"
+);
+
+if(!modal) return;
+
+modal.classList.remove(
+"is-visible"
+);
+
+modal.setAttribute(
+"aria-hidden",
+"true"
+);
+
+if(recordarSesion){
+
+sessionStorage.setItem(
+"installPromptDismissed",
+"1"
+);
+
+}
+
+}
+
+async function installApp(){
+
+if(
+deferredInstallPrompt
+){
+
+deferredInstallPrompt.prompt();
+
+const choice =
+await deferredInstallPrompt.userChoice;
+
+deferredInstallPrompt =
+null;
+
+if(
+choice.outcome === "accepted"
+){
+
+hideInstallModal(
+false
+);
+
+return;
+
+}
+
+setInstallHelp(
+"La instalación se canceló. Puedes intentar de nuevo desde este botón."
+);
+
+return;
+
+}
+
+if(
+isIOSDevice()
+){
+
+setInstallHelp(
+"En iPhone o iPad toca Compartir y luego Agregar a pantalla de inicio."
+);
+
+return;
+
+}
+
+setInstallHelp(
+"Si tu navegador no muestra el instalador, abre el menú y elige Instalar app o Agregar a pantalla de inicio."
+);
+
+}
+
+function activarInstalacionPWA(){
+
+const btnInstall =
+document.getElementById(
+"btnInstallApp"
+);
+
+const btnLater =
+document.getElementById(
+"btnInstallLater"
+);
+
+const btnClose =
+document.getElementById(
+"btnInstallClose"
+);
+
+if(btnInstall){
+btnInstall.onclick =
+installApp;
+}
+
+if(btnLater){
+btnLater.onclick =
+()=>hideInstallModal();
+}
+
+if(btnClose){
+btnClose.onclick =
+()=>hideInstallModal();
+}
+
+window.addEventListener(
+"beforeinstallprompt",
+event => {
+
+event.preventDefault();
+
+deferredInstallPrompt =
+event;
+
+setTimeout(
+showInstallModal,
+500
+);
+
+}
+);
+
+window.addEventListener(
+"appinstalled",
+()=>hideInstallModal(
+false
+)
+);
+
+if(
+isIOSDevice()
+){
+
+setTimeout(
+showInstallModal,
+700
+);
+
+}
+
+}
 
 function parseCSV(csv){
 
@@ -1183,6 +1409,8 @@ window.addEventListener(
 cargarMedicamentos();
 
 activarBuscador();
+
+activarInstalacionPWA();
 
 document.getElementById(
 "btnMedicamentos"

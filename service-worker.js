@@ -1,4 +1,4 @@
-const CACHE_NAME = "pedicalc-v1.73-health-brand";
+const CACHE_NAME = "pedicalc-v1.73-install-prompt";
 
 const urlsToCache = [
   "./",

@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PediCalc Pro v1.73</title>
-  <meta name="theme-color" content="#0f766e">
+  <meta name="theme-color" content="#2196f3">
   <link rel="manifest" href="/pedical/manifest.json">
   <link rel="icon" href="brand-icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <main class="app-shell">
@@ -189,6 +189,24 @@
       </div>
     </section>
   </main>
+
+  <div class="install-modal" id="installModal" aria-hidden="true">
+    <div class="install-card" role="dialog" aria-modal="true" aria-labelledby="installTitle">
+      <button class="install-close" id="btnInstallClose" type="button" aria-label="Cerrar">×</button>
+      <img class="install-logo" src="icon-192.png" alt="" aria-hidden="true">
+      <div class="install-copy">
+        <p class="install-kicker">Instalar aplicación</p>
+        <h2 id="installTitle">PediCalc Pro en tu pantalla</h2>
+        <p>Accede más rápido, úsala como app y conserva la experiencia optimizada para móvil.</p>
+        <p class="install-help" id="installHelp"></p>
+      </div>
+      <div class="install-actions">
+        <button id="btnInstallApp" type="button">Instalar app</button>
+        <button id="btnInstallLater" class="secondary-btn" type="button">Ahora no</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
