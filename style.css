@@ -300,6 +300,16 @@ input::placeholder {
   color: #a0aabc;
 }
 
+.search-results-list {
+  min-height: 178px;
+  padding: 8px;
+}
+
+.search-results-list option {
+  padding: 9px 10px;
+  border-radius: 6px;
+}
+
 input:focus,
 select:focus {
   border-color: var(--accent);
@@ -445,6 +455,22 @@ select:focus {
   margin: 0 0 5px;
 }
 
+.commercial-note {
+  margin-top: 18px;
+  border-color: rgba(14, 165, 233, 0.24);
+  background: linear-gradient(135deg, rgba(224, 250, 255, 0.72), rgba(255, 255, 255, 0.88));
+}
+
+.commercial-note h3 {
+  color: #0369a1;
+  font-size: 0.88rem;
+}
+
+.commercial-note p {
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #08131f;
@@ -511,6 +537,15 @@ select:focus {
   .result-title::after {
     background: rgba(37, 99, 235, 0.18);
     color: #bfdbfe;
+  }
+
+  .commercial-note {
+    border-color: rgba(56, 189, 248, 0.2);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(15, 23, 42, 0.62));
+  }
+
+  .commercial-note h3 {
+    color: #7dd3fc;
   }
 
   .result-item {

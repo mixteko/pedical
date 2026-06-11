@@ -4,6 +4,100 @@ const SHEET_URL =
 let medicamentos = [];
 let indicacionActual = "";
 
+function parseCSV(csv){
+
+const filas = [];
+let fila = [];
+let valor = "";
+let dentroComillas = false;
+
+for(let i = 0; i < csv.length; i++){
+
+const char = csv[i];
+const siguiente = csv[i + 1];
+
+if(char === '"'){
+
+if(dentroComillas && siguiente === '"'){
+valor += '"';
+i++;
+}else{
+dentroComillas = !dentroComillas;
+}
+
+continue;
+
+}
+
+if(char === "," && !dentroComillas){
+fila.push(valor);
+valor = "";
+continue;
+}
+
+if((char === "\n" || char === "\r") && !dentroComillas){
+
+if(char === "\r" && siguiente === "\n"){
+i++;
+}
+
+fila.push(valor);
+filas.push(fila);
+fila = [];
+valor = "";
+continue;
+
+}
+
+valor += char;
+
+}
+
+if(valor || fila.length){
+fila.push(valor);
+filas.push(fila);
+}
+
+return filas;
+
+}
+
+function getMedValue(med,columna){
+
+const key =
+Object.keys(med).find(
+nombre =>
+nombre.trim().toLowerCase() ===
+columna.trim().toLowerCase()
+);
+
+return key
+? med[key]
+: "";
+
+}
+
+function escapeHTML(valor){
+
+return String(valor || "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+function getNombresComerciales(med){
+
+return getMedValue(
+med,
+"comercial"
+)
+.trim();
+
+}
+
 /* ================================= */
 /* GOOGLE SHEETS */
 /* ================================= */
@@ -19,9 +113,9 @@ const csv =
 await response.text();
 
 const filas =
+parseCSV(
 csv.trim()
-.split("\n")
-.map(f => f.split(","));
+);
 
 const encabezados =
 filas[0].map(
@@ -91,14 +185,57 @@ alert(
 
 function llenarMedicamentos(){
 
+renderMedicamentosSelect(
+medicamentos,
+""
+);
+
+restaurarMedicamento();
+
+}
+
+function renderMedicamentosSelect(lista,textoBusqueda){
+
 const select =
 document.getElementById(
 "medicamento"
 );
 
+if(!select) return;
+
 select.innerHTML = "";
 
-medicamentos.forEach(
+if(
+lista.length === 0
+){
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+"";
+
+option.textContent =
+"Sin resultados";
+
+select.appendChild(
+option
+);
+
+select.size =
+1;
+
+select.classList.remove(
+"search-results-list"
+);
+
+return;
+
+}
+
+lista.forEach(
 (med,index)=>{
 
 const option =
@@ -107,10 +244,19 @@ document.createElement(
 );
 
 option.value =
-index;
+medicamentos.indexOf(
+med
+);
+
+const comercial =
+getNombresComerciales(
+med
+);
 
 option.textContent =
-med.NOMBRE;
+comercial && textoBusqueda
+? `${med.NOMBRE} · ${comercial}`
+: med.NOMBRE;
 
 select.appendChild(
 option
@@ -118,7 +264,38 @@ option
 
 });
 
-restaurarMedicamento();
+if(
+select.options.length
+){
+
+select.selectedIndex =
+0;
+
+}
+
+select.size =
+textoBusqueda
+? Math.min(
+lista.length,
+8
+)
+: 1;
+
+if(
+textoBusqueda
+){
+
+select.classList.add(
+"search-results-list"
+);
+
+}else{
+
+select.classList.remove(
+"search-results-list"
+);
+
+}
 
 }
 
@@ -143,41 +320,56 @@ const texto =
 this.value
 .toLowerCase();
 
-const select =
-document.getElementById(
-"medicamento"
-);
-
-select.innerHTML = "";
-
+const resultados =
 medicamentos
-.filter(
-m =>
+.map(
+m => {
+
+const nombre =
 (m.NOMBRE || "")
-.toLowerCase()
-.includes(texto)
+.toLowerCase();
+
+const comercial =
+getNombresComerciales(
+m
 )
-.forEach(
-(med)=>{
+.toLowerCase();
 
-const option =
-document.createElement(
-"option"
+return {
+med:m,
+coincideNombre:nombre.includes(
+texto
+),
+coincideComercial:comercial.includes(
+texto
+)
+};
+
+}
+)
+.filter(
+item =>
+item.coincideNombre ||
+item.coincideComercial
+)
+.sort(
+(a,b)=>
+Number(
+b.coincideNombre
+) -
+Number(
+a.coincideNombre
+)
+)
+.map(
+item =>
+item.med
 );
 
-option.value =
-medicamentos.indexOf(
-med
+renderMedicamentosSelect(
+resultados,
+texto
 );
-
-option.textContent =
-med.NOMBRE;
-
-select.appendChild(
-option
-);
-
-});
 
 });
 
@@ -294,6 +486,15 @@ parseFloat(
 med.CONCENTRACION_MG
 );
 
+const nombresComerciales =
+getNombresComerciales(
+med
+);
+
+const notaComercial =
+nombresComerciales ||
+"Sin nombres comerciales registrados en la base.";
+
 const r =
 document.getElementById(
 "resultado"
@@ -364,6 +565,13 @@ Cada ${24/frecuencia} horas
 </span>
 </div>
 
+<div class="info-box commercial-note">
+<h3>Nombres comerciales</h3>
+<p>
+${escapeHTML(notaComercial)}
+</p>
+</div>
+
 <button
 onclick="copiarIndicacion()">
 
@@ -402,7 +610,10 @@ Administrar:
 ${mlToma.toFixed(2)} mL
 
 Frecuencia:
-Cada ${24/frecuencia} horas`;
+Cada ${24/frecuencia} horas
+
+Nombres comerciales:
+${notaComercial}`;
 
 }
 /* ================================= */
@@ -444,6 +655,11 @@ document.getElementById(
 document.getElementById(
 "buscar"
 ).value = "";
+
+renderMedicamentosSelect(
+medicamentos,
+""
+);
 
 document.getElementById(
 "resultado"
