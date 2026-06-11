@@ -1,10 +1,11 @@
-const CACHE_NAME = "pedicalc-v1.73";
+const CACHE_NAME = "pedicalc-v1.73-health-brand";
 
 const urlsToCache = [
   "./",
   "./index.html",
   "./style.css",
   "./app.js",
+  "./brand-icon.svg",
   "./manifest.json"
 ];
 

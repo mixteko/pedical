@@ -4,12 +4,18 @@
   "description": "Calculadora Pediátrica Inteligente",
   "start_url": "/pedical/",
   "display": "standalone",
-  "background_color": "#2563eb",
-  "theme_color": "#2563eb",
+  "background_color": "#0f766e",
+  "theme_color": "#0f766e",
   "orientation": "portrait",
   "scope": "/pedical/",
   "lang": "es-MX",
   "icons": [
+    {
+      "src": "brand-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "icon-192.png",
       "sizes": "192x192",

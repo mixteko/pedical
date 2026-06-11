@@ -1,20 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg: #eef2f6;
+  --bg: #edf7f6;
   --surface: #ffffff;
-  --surface-muted: #f7f9fc;
-  --text: #121826;
-  --text-soft: #5b667a;
-  --muted: #8a95a8;
-  --line: #dfe5ee;
-  --line-strong: #c9d2df;
-  --primary: #0f766e;
-  --primary-strong: #115e59;
-  --accent: #2563eb;
-  --success: #15803d;
+  --surface-muted: #f3faf9;
+  --text: #102033;
+  --text-soft: #526579;
+  --muted: #8090a3;
+  --line: #d8e8e7;
+  --line-strong: #b9d1d2;
+  --primary: #0e9384;
+  --primary-strong: #0f766e;
+  --accent: #1d7ed0;
+  --aqua: #20c7d9;
+  --coral: #f26d6d;
+  --success: #0f9f6e;
   --danger: #dc2626;
-  --shadow: 0 24px 70px rgba(17, 24, 39, 0.12);
+  --shadow: 0 24px 70px rgba(14, 116, 144, 0.14);
   --radius: 8px;
 }
 
@@ -30,9 +32,10 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(238, 242, 246, 0.96)),
-    radial-gradient(circle at 18% 0%, rgba(15, 118, 110, 0.14), transparent 34%),
-    radial-gradient(circle at 90% 12%, rgba(37, 99, 235, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(237, 247, 246, 0.96)),
+    radial-gradient(circle at 12% 0%, rgba(32, 199, 217, 0.18), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(29, 126, 208, 0.14), transparent 30%),
+    radial-gradient(circle at 75% 92%, rgba(242, 109, 109, 0.11), transparent 28%),
     var(--bg);
   color: var(--text);
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -81,18 +84,12 @@ select:focus-visible {
 }
 
 .logo {
-  width: 62px;
-  height: 62px;
-  display: grid;
-  place-items: center;
+  width: 68px;
+  height: 68px;
+  display: block;
   flex: 0 0 auto;
-  border: 1px solid rgba(15, 118, 110, 0.18);
-  border-radius: 18px;
-  background: #e6f4f1;
-  color: var(--primary-strong);
-  font-size: 1.05rem;
-  font-weight: 800;
-  box-shadow: 0 14px 35px rgba(15, 118, 110, 0.14);
+  border-radius: 22px;
+  filter: drop-shadow(0 18px 30px rgba(14, 116, 144, 0.22));
 }
 
 .eyebrow {
@@ -140,8 +137,8 @@ h2 {
   padding: 8px 12px;
   border: 1px solid rgba(21, 128, 61, 0.22);
   border-radius: 999px;
-  background: rgba(220, 252, 231, 0.72);
-  color: #166534;
+  background: rgba(220, 252, 231, 0.78);
+  color: #0f6f49;
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -151,8 +148,8 @@ h2 {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--success);
-  box-shadow: 0 0 0 4px rgba(21, 128, 61, 0.11);
+  background: linear-gradient(135deg, var(--success), var(--aqua));
+  box-shadow: 0 0 0 4px rgba(15, 159, 110, 0.12);
 }
 
 .tabs {
@@ -186,25 +183,43 @@ h2 {
 }
 
 .tab-btn.active {
-  background: var(--text);
+  background: linear-gradient(135deg, #102033, #0f766e);
   color: #ffffff;
-  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.18);
+  box-shadow: 0 12px 28px rgba(14, 116, 144, 0.24);
 }
 
 .tab-icon {
-  min-width: 30px;
-  height: 24px;
+  min-width: 34px;
+  height: 30px;
   display: inline-grid;
   place-items: center;
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.14);
-  font-size: 0.72rem;
-  font-weight: 800;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.tab-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tab-btn:not(.active) .tab-icon {
-  background: #edf2f7;
+  background: #e7f8f6;
   color: var(--primary-strong);
+}
+
+.tab-btn:not(.active) .water-icon {
+  background: #e8f5ff;
+  color: var(--accent);
+}
+
+.tab-btn:not(.active) .rehydrate-icon {
+  background: #fff0f0;
+  color: var(--coral);
 }
 
 .card {
@@ -232,9 +247,9 @@ h2 {
   justify-content: center;
   min-height: 32px;
   padding: 7px 11px;
-  border: 1px solid rgba(15, 118, 110, 0.2);
+  border: 1px solid rgba(14, 147, 132, 0.24);
   border-radius: 999px;
-  background: #eefaf7;
+  background: linear-gradient(135deg, #eefdf9, #eaf8ff);
   color: var(--primary-strong);
   font-size: 0.78rem;
   font-weight: 800;
@@ -288,7 +303,7 @@ input::placeholder {
 input:focus,
 select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.11);
+  box-shadow: 0 0 0 4px rgba(29, 126, 208, 0.12);
 }
 
 .input-affix {
@@ -302,7 +317,7 @@ select:focus {
 
 .input-affix:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.11);
+  box-shadow: 0 0 0 4px rgba(29, 126, 208, 0.12);
 }
 
 .input-affix input {
@@ -335,16 +350,16 @@ select:focus {
 #resultado button {
   width: auto;
   padding: 0 18px;
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #ffffff;
   font-weight: 800;
-  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.18);
+  box-shadow: 0 12px 28px rgba(14, 147, 132, 0.24);
 }
 
 .actions button:hover,
 #resultado button:hover {
   transform: translateY(-1px);
-  background: var(--primary-strong);
+  background: linear-gradient(135deg, var(--primary-strong), #1769aa);
 }
 
 .actions .secondary-btn {
@@ -383,8 +398,8 @@ select:focus {
   content: "Resultado";
   padding: 6px 9px;
   border-radius: 999px;
-  background: #eef2ff;
-  color: #3730a3;
+  background: #e8f8ff;
+  color: #0f5f99;
   font-size: 0.72rem;
   font-weight: 800;
 }
@@ -432,21 +447,22 @@ select:focus {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b1120;
-    --surface: #111827;
-    --surface-muted: #151f31;
+    --bg: #08131f;
+    --surface: #101a28;
+    --surface-muted: #142334;
     --text: #f8fafc;
-    --text-soft: #b6c0cf;
-    --muted: #8995a7;
-    --line: #263244;
-    --line-strong: #334155;
-    --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+    --text-soft: #b7c7d5;
+    --muted: #8da2b4;
+    --line: #244150;
+    --line-strong: #315162;
+    --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
   }
 
   body {
     background:
-      radial-gradient(circle at 18% 0%, rgba(20, 184, 166, 0.16), transparent 34%),
-      radial-gradient(circle at 90% 12%, rgba(96, 165, 250, 0.13), transparent 30%),
+      radial-gradient(circle at 15% 0%, rgba(34, 211, 238, 0.16), transparent 34%),
+      radial-gradient(circle at 90% 12%, rgba(37, 99, 235, 0.16), transparent 30%),
+      radial-gradient(circle at 78% 92%, rgba(251, 113, 133, 0.13), transparent 28%),
       var(--bg);
   }
 
@@ -456,12 +472,11 @@ select:focus {
   }
 
   .logo {
-    background: rgba(20, 184, 166, 0.12);
-    color: #99f6e4;
+    filter: drop-shadow(0 18px 30px rgba(34, 211, 238, 0.2));
   }
 
   .metric-chip {
-    background: rgba(20, 184, 166, 0.1);
+    background: rgba(20, 184, 166, 0.12);
     color: #99f6e4;
   }
 
@@ -479,8 +494,18 @@ select:focus {
   }
 
   .tab-btn:not(.active) .tab-icon {
-    background: #172033;
+    background: #142b36;
     color: #99f6e4;
+  }
+
+  .tab-btn:not(.active) .water-icon {
+    background: #132841;
+    color: #93c5fd;
+  }
+
+  .tab-btn:not(.active) .rehydrate-icon {
+    background: #321b26;
+    color: #fda4af;
   }
 
   .result-title::after {
@@ -509,10 +534,9 @@ select:focus {
   }
 
   .logo {
-    width: 52px;
-    height: 52px;
+    width: 54px;
+    height: 54px;
     border-radius: 14px;
-    font-size: 0.9rem;
   }
 
   .tabs {
