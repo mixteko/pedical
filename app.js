@@ -259,11 +259,19 @@ return;
 
 }
 
-const dosisDia =
-peso *
+const dosisMgKgDia =
 parseFloat(
 med.DOSIS_MG_KG_DIA
 );
+
+const dosisPorKilo =
+med.DOSIS_MG_KG_DIA
+? `${med.DOSIS_MG_KG_DIA} mg/kg/día`
+: "-";
+
+const dosisDia =
+peso *
+dosisMgKgDia;
 
 const frecuencia =
 parseFloat(
@@ -311,6 +319,13 @@ ${med.CATEGORIA || "-"}
 <span>Vía</span>
 <span class="valor">
 ${med.VIA || "-"}
+</span>
+</div>
+
+<div class="result-item">
+<span>Dosis por kilo usada</span>
+<span class="valor">
+${dosisPorKilo}
 </span>
 </div>
 
@@ -367,6 +382,9 @@ ${med.CATEGORIA || "-"}
 
 Vía:
 ${med.VIA || "-"}
+
+Dosis por kilo usada:
+${dosisPorKilo}
 
 Dosis máxima:
 ${med["DOSIS MAXIMAS"] || "-"}
