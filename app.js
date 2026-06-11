@@ -58,7 +58,7 @@ document.getElementById(
 if(estado){
 
 estado.innerHTML =
-"🟢 Base de medicamentos cargada";
+"Base de medicamentos cargada";
 
 }
 
@@ -74,7 +74,7 @@ document.getElementById(
 if(estado){
 
 estado.innerHTML =
-"🔴 Error cargando medicamentos";
+"Error cargando medicamentos";
 
 }
 
@@ -297,7 +297,7 @@ r.style.display =
 r.innerHTML = `
 
 <div class="result-title">
-💊 ${med.NOMBRE}
+${med.NOMBRE}
 </div>
 
 <div class="result-item">
@@ -352,7 +352,7 @@ Cada ${24/frecuencia} horas
 <button
 onclick="copiarIndicacion()">
 
-📋 Copiar indicación
+Copiar indicación
 
 </button>
 
@@ -649,7 +649,7 @@ r.style.display =
 r.innerHTML = `
 
 <div class="result-title">
-💧 Mantenimiento
+Mantenimiento hídrico
 </div>
 
 <div class="result-item">
@@ -836,7 +836,7 @@ r.style.display =
 r.innerHTML = `
 
 <div class="result-title">
-🚑 Deshidratación
+Deshidratación
 </div>
 
 <div class="result-item">

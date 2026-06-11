@@ -1,208 +1,175 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>PediCalc Pro v1.73</title>
-
-<meta name="theme-color" content="#2563eb">
-
-<link rel="manifest" href="/pedical/manifest.json">
-
-<link rel="apple-touch-icon" href="icon-192.png">
-
-<link rel="stylesheet" href="style.css">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PediCalc Pro v1.73</title>
+  <meta name="theme-color" content="#111827">
+  <link rel="manifest" href="/pedical/manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
+  <main class="app-shell">
+    <header class="header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">PC</div>
+        <div>
+          <p class="eyebrow">Calculadora pediátrica</p>
+          <h1>PediCalc Pro</h1>
+        </div>
+      </div>
 
-<div class="container">
+      <div class="header-copy">
+        <p>Dosificación, mantenimiento hídrico y reposición en una interfaz rápida para consulta clínica.</p>
+        <div id="estadoConexion">Base de medicamentos cargada</div>
+      </div>
+    </header>
 
-<div class="header">
+    <nav class="tabs" aria-label="Herramientas pediátricas">
+      <button class="tab-btn active" id="btnMedicamentos" type="button">
+        <span class="tab-icon" aria-hidden="true">Rx</span>
+        <span>Medicamentos</span>
+      </button>
+      <button class="tab-btn" id="btnMantenimiento" type="button">
+        <span class="tab-icon" aria-hidden="true">mL</span>
+        <span>Mantenimiento</span>
+      </button>
+      <button class="tab-btn" id="btnDeshidratacion" type="button">
+        <span class="tab-icon" aria-hidden="true">%</span>
+        <span>Deshidratación</span>
+      </button>
+    </nav>
 
-<div class="logo">
-🩺
-</div>
+    <section id="medicamentos-tab">
+      <div class="card">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Módulo principal</p>
+            <h2>Dosis por medicamento</h2>
+          </div>
+          <span class="metric-chip">v1.73</span>
+        </div>
 
-<h1>PediCalc Pro</h1>
+        <div class="form-grid">
+          <div class="form-group compact">
+            <label for="peso">Peso</label>
+            <div class="input-affix">
+              <input type="number" id="peso" step="0.1" placeholder="15.0">
+              <span>kg</span>
+            </div>
+          </div>
 
-<p>
-Calculadora Pediátrica Inteligente v1.73
-</p>
+          <div class="form-group">
+            <label for="buscar">Buscar medicamento</label>
+            <input type="text" id="buscar" placeholder="Paracetamol, ibuprofeno...">
+          </div>
 
-<div id="estadoConexion">
-🟢 Base de medicamentos cargada
-</div>
+          <div class="form-group full">
+            <label for="medicamento">Seleccionar</label>
+            <select id="medicamento">
+              <option>Cargando...</option>
+            </select>
+          </div>
+        </div>
 
-</div>
+        <div class="actions">
+          <button id="btnCalcular" type="button">Calcular dosis</button>
+          <button id="btnLimpiarMedicamentos" class="secondary-btn" type="button">Limpiar</button>
+        </div>
 
-<div class="tabs">
+        <div id="resultado"></div>
+      </div>
+    </section>
 
-<button class="tab-btn active" id="btnMedicamentos">
-💊 Medicamentos
-</button>
+    <section id="mantenimiento-tab" style="display:none;">
+      <div class="card">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Holliday-Segar</p>
+            <h2>Mantenimiento hídrico</h2>
+          </div>
+          <span class="metric-chip">24 h</span>
+        </div>
 
-<button class="tab-btn" id="btnMantenimiento">
-💧 Mantenimiento
-</button>
+        <div class="form-grid single">
+          <div class="form-group compact">
+            <label for="pesoMantenimiento">Peso</label>
+            <div class="input-affix">
+              <input type="number" id="pesoMantenimiento" step="0.1" placeholder="15.0">
+              <span>kg</span>
+            </div>
+          </div>
+        </div>
 
-<button class="tab-btn" id="btnDeshidratacion">
-🚑 Deshidratación
-</button>
+        <div class="actions">
+          <button id="btnMantenimientoCalc" type="button">Calcular</button>
+          <button id="btnLimpiarMantenimiento" class="secondary-btn" type="button">Limpiar</button>
+        </div>
 
-</div>
+        <div id="resultadoMantenimiento"></div>
+      </div>
+    </section>
 
-<section id="medicamentos-tab">
+    <section id="deshidratacion-tab" style="display:none;">
+      <div class="card">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Plan de reposición</p>
+            <h2>Deshidratación</h2>
+          </div>
+          <span class="metric-chip">8 + 16 h</span>
+        </div>
 
-<div class="card">
+        <div class="form-grid">
+          <div class="form-group compact">
+            <label for="pesoDeshidratacion">Peso</label>
+            <div class="input-affix">
+              <input type="number" id="pesoDeshidratacion" step="0.1" placeholder="15.0">
+              <span>kg</span>
+            </div>
+          </div>
 
-<div class="form-group">
-<label>Peso (kg)</label>
-<input type="number" id="peso" step="0.1" placeholder="Ejemplo: 15">
-</div>
+          <div class="form-group">
+            <label for="gradoDeshidratacion">Grado</label>
+            <select id="gradoDeshidratacion">
+              <option value="5">Leve (5%)</option>
+              <option value="8">Moderada (8%)</option>
+              <option value="10">Grave (10%)</option>
+              <option value="personalizada">Personalizada</option>
+            </select>
+          </div>
 
-<div class="form-group">
-<label>Buscar medicamento</label>
-<input type="text" id="buscar" placeholder="Paracetamol">
-</div>
+          <div class="form-group compact">
+            <label for="porcentaje">Porcentaje</label>
+            <div class="input-affix">
+              <input type="number" id="porcentaje" value="5">
+              <span>%</span>
+            </div>
+          </div>
 
-<div class="form-group">
-<label>Medicamento</label>
-<select id="medicamento">
-<option>Cargando...</option>
-</select>
-</div>
+          <div class="form-group">
+            <label for="tipoSolucion">Solución</label>
+            <select id="tipoSolucion">
+              <option value="SSN 0.9%">SSN 0.9%</option>
+              <option value="Hartmann">Hartmann</option>
+              <option value="Mixta">Mixta</option>
+            </select>
+          </div>
+        </div>
 
-<button id="btnCalcular">
-CALCULAR DOSIS
-</button>
+        <div class="actions">
+          <button id="btnDeshidratacionCalc" type="button">Calcular reposición</button>
+          <button id="btnLimpiarDeshidratacion" class="secondary-btn" type="button">Limpiar</button>
+        </div>
 
-<div id="resultado"></div>
-
-<button
-id="btnLimpiarMedicamentos"
-class="secondary-btn">
-🧹 Limpiar </button>
-
-</div>
-
-</section>
-
-<section
-id="mantenimiento-tab"
-style="display:none;">
-
-<div class="card">
-
-<div class="form-group">
-<label>Peso (kg)</label>
-<input type="number" id="pesoMantenimiento" step="0.1">
-</div>
-
-<button id="btnMantenimientoCalc">
-CALCULAR
-</button>
-
-<div id="resultadoMantenimiento"></div>
-
-<button
-id="btnLimpiarMantenimiento"
-class="secondary-btn">
-🧹 Limpiar </button>
-
-</div>
-
-</section>
-
-<section
-id="deshidratacion-tab"
-style="display:none;">
-
-<div class="card">
-
-<div class="form-group">
-<label>Peso (kg)</label>
-<input type="number" id="pesoDeshidratacion" step="0.1">
-</div>
-
-<div class="form-group">
-<label>Grado</label>
-
-<select id="gradoDeshidratacion">
-
-<option value="5">
-🟢 Leve (5%)
-</option>
-
-<option value="8">
-🟡 Moderada (8%)
-</option>
-
-<option value="10">
-🔴 Grave (10%)
-</option>
-
-<option value="personalizada">
-⚙️ Personalizada
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-<label>Porcentaje</label>
-<input type="number" id="porcentaje" value="5">
-</div>
-
-<div class="form-group">
-
-<label>Solución</label>
-
-<select id="tipoSolucion">
-
-<option value="SSN 0.9%">
-SSN 0.9%
-</option>
-
-<option value="Hartmann">
-Hartmann
-</option>
-
-<option value="Mixta">
-Mixta
-</option>
-
-</select>
-
-</div>
-
-<button id="btnDeshidratacionCalc">
-CALCULAR REPOSICIÓN
-</button>
-
-<div id="resultadoDeshidratacion"></div>
-
-<button
-id="btnLimpiarDeshidratacion"
-class="secondary-btn">
-🧹 Limpiar </button>
-
-</div>
-
-</section>
-
-</div>
-<script src="app.js"></script>
+        <div id="resultadoDeshidratacion"></div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
 </body>
 </html>
